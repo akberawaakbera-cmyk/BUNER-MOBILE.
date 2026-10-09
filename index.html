@@ -591,17 +591,31 @@
     </div>
 
 
-    <!-- THREE.JS -->
+    <!-- THREE.JS + GLB MODEL LOADER -->
 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script type="module">
+    import * as THREE from
+        "https://esm.sh/three@0.160.0";
 
-    <!-- GAME LOGIC -->
+    import { GLTFLoader } from
+        "https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 
-    <script src="game.js"></script>
+    window.THREE = THREE;
+    window.GLTFLoader = GLTFLoader;
 
-    <!-- INTRO SCREEN CONTROL -->
+    const gameScript = document.createElement("script");
+    gameScript.src = "./game.js";
 
-    <script>
+    gameScript.onload = () => {
+        console.log("BUNER MOBILE: Game loaded successfully");
+    };
+
+    gameScript.onerror = () => {
+        console.error("BUNER MOBILE: game.js failed to load");
+    };
+
+    document.body.appendChild(gameScript);
+</script>
         (() => {
             const splash = document.getElementById("splashScreen");
             const loadingText = document.getElementById("loadingText");
