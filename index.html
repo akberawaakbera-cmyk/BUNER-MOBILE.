@@ -25,19 +25,58 @@
 
 <div id="app">
 
-    <!-- =========================
-         TOP HEADER
-    ========================== -->
+    <!-- INTRO / LOADING SCREEN -->
+
+    <section id="splashScreen" class="splash-screen">
+
+        <div class="splash-background"></div>
+
+        <div class="splash-content">
+
+            <div class="splash-emblem">
+                <span>B</span>
+            </div>
+
+            <p class="splash-studio">BUNER STUDIOS PRESENTS</p>
+
+            <h1 class="splash-title">
+                BUNER <span>MOBILE</span>
+            </h1>
+
+            <p class="splash-subtitle">
+                ENTER THE BATTLEFIELD
+            </p>
+
+            <div class="splash-loader">
+                <div class="splash-loader-fill"></div>
+            </div>
+
+            <p id="loadingText" class="splash-loading-text">
+                INITIALIZING GAME...
+            </p>
+
+            <p class="splash-version">
+                DEVELOPMENT BUILD · V1
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOP HEADER -->
 
     <header class="top-bar">
 
         <div class="brand">
+
             <div class="brand-icon">B</div>
 
             <div>
                 <h1>BUNER MOBILE</h1>
                 <p>BATTLE SURVIVAL</p>
             </div>
+
         </div>
 
         <div class="player-level">
@@ -48,9 +87,7 @@
     </header>
 
 
-    <!-- =========================
-         MAIN LOBBY
-    ========================== -->
+    <!-- MAIN LOBBY -->
 
     <main id="lobby" class="lobby">
 
@@ -85,9 +122,7 @@
 
                 <h3 id="playerName">SURVIVOR</h3>
 
-                <p id="playerStatus">
-                    Rookie Warrior
-                </p>
+                <p id="playerStatus">Rookie Warrior</p>
 
             </div>
 
@@ -102,27 +137,38 @@
         </section>
 
 
-        <!-- CHARACTER PREVIEW -->
+        <!-- 3D CHARACTER PREVIEW -->
 
         <section class="selection-section">
 
             <div class="section-heading">
+
                 <div>
                     <p class="eyebrow">YOUR FIGHTER</p>
                     <h2>CHARACTER</h2>
                 </div>
 
                 <span class="section-number">01</span>
+
             </div>
 
             <div class="character-preview">
 
-                <div class="character-placeholder">
-                    <span>🧍</span>
-                    <p>3D CHARACTER PREVIEW</p>
-                    <small>
-                        Character model will appear here
-                    </small>
+                <!-- Three.js character will render here -->
+
+                <div
+                    id="characterPreviewCanvas"
+                    class="character-preview-canvas"
+                    aria-label="3D character preview"
+                ></div>
+
+                <div class="character-preview-label">
+                    <span class="online-indicator"></span>
+                    CHARACTER PREVIEW
+                </div>
+
+                <div class="character-rotate-hint">
+                    DRAG TO ROTATE CHARACTER
                 </div>
 
                 <div class="character-actions">
@@ -234,8 +280,8 @@
             </div>
 
             <p class="info-note">
-                Weapon icons are placeholders. Real 3D weapon models
-                will be added in a later development stage.
+                Weapon icons are placeholders. Detailed 3D weapons
+                can be added as the game develops.
             </p>
 
         </section>
@@ -320,14 +366,14 @@
             </div>
 
             <p class="info-note">
-                Additional maps will require their own 3D terrain,
-                buildings and environment assets.
+                Each map can be developed with its own terrain,
+                buildings, roads and environmental assets.
             </p>
 
         </section>
 
 
-        <!-- SETTINGS -->
+        <!-- SETTINGS AND INVENTORY -->
 
         <section class="menu-grid">
 
@@ -386,9 +432,7 @@
     </main>
 
 
-    <!-- =========================
-         GAME SCREEN
-    ========================== -->
+    <!-- GAME SCREEN -->
 
     <section id="gameScreen" class="game-screen hidden">
 
@@ -438,40 +482,29 @@
 
         <!-- GAME MESSAGE -->
 
-        <div
-            id="gameMessage"
-            class="game-message"
-        >
+        <div id="gameMessage" class="game-message">
             BUNER MOBILE
         </div>
 
 
         <!-- CROSSHAIR -->
 
-        <div
-            id="crosshair"
-            class="crosshair"
-        >
-            +
-        </div>
+        <div id="crosshair" class="crosshair">+</div>
 
 
-        <!-- LEFT JOYSTICK -->
+        <!-- MOBILE CONTROLS -->
 
         <div class="mobile-controls">
 
-            <div
-                id="joystick"
-                class="joystick"
-            >
+            <div id="joystick" class="joystick">
+
                 <div
                     id="joystickKnob"
                     class="joystick-knob"
                 ></div>
+
             </div>
 
-
-            <!-- RIGHT-SIDE ACTION BUTTONS -->
 
             <div class="action-buttons">
 
@@ -535,14 +568,9 @@
     </section>
 
 
-    <!-- =========================
-         MODAL DIALOG
-    ========================== -->
+    <!-- MODAL DIALOG -->
 
-    <div
-        id="modal"
-        class="modal hidden"
-    >
+    <div id="modal" class="modal hidden">
 
         <div class="modal-card">
 
@@ -554,9 +582,7 @@
                 ✕
             </button>
 
-            <h2 id="modalTitle">
-                BUNER MOBILE
-            </h2>
+            <h2 id="modalTitle">BUNER MOBILE</h2>
 
             <div id="modalContent"></div>
 
@@ -572,6 +598,46 @@
     <!-- GAME LOGIC -->
 
     <script src="game.js"></script>
+
+    <!-- INTRO SCREEN CONTROL -->
+
+    <script>
+        (() => {
+            const splash = document.getElementById("splashScreen");
+            const loadingText = document.getElementById("loadingText");
+
+            if (!splash) return;
+
+            const messages = [
+                "INITIALIZING GAME...",
+                "PREPARING BATTLEFIELD...",
+                "LOADING PLAYER PROFILE...",
+                "WELCOME TO BUNER MOBILE"
+            ];
+
+            let index = 0;
+
+            const messageTimer = window.setInterval(() => {
+                index++;
+
+                if (index < messages.length && loadingText) {
+                    loadingText.textContent = messages[index];
+                } else {
+                    window.clearInterval(messageTimer);
+                }
+            }, 550);
+
+            window.setTimeout(() => {
+                splash.classList.add("splash-hidden");
+
+                window.setTimeout(() => {
+                    splash.classList.add("hidden");
+                }, 800);
+
+                window.clearInterval(messageTimer);
+            }, 2400);
+        })();
+    </script>
 
 </div>
 
