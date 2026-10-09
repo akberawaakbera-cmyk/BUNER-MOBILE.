@@ -1021,7 +1021,7 @@
     const loader = new window.GLTFLoader();
 
     loader.load(
-        "./player.glb",
+    "./fca4f8d5-58d7-4f74-b56b-e80c95bc83bd_white_mesh.glb",
 
         function (gltf) {
             if (!player || !scene) return;
