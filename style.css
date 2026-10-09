@@ -1,7 +1,7 @@
 :root {
-    --bg: #0b100d;
-    --panel: #141d16;
-    --panel2: #1c291e;
+    --bg: #080d09;
+    --panel: #111a13;
+    --panel2: #1b291d;
     --green: #b7ff4a;
     --green-dark: #78a92e;
     --white: #f4f7ef;
@@ -9,59 +9,280 @@
     --border: rgba(183, 255, 74, 0.22);
     --danger: #ff4b4b;
 }
-
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
-
 html {
     width: 100%;
     min-height: 100%;
     background: var(--bg);
+    scroll-behavior: smooth;
 }
-
 body {
     width: 100%;
     min-height: 100vh;
+    min-height: 100dvh;
     margin: 0;
     overflow-x: hidden;
     background: var(--bg);
     color: var(--white);
     font-family: Arial, Helvetica, sans-serif;
 }
-
 button {
     color: inherit;
     font: inherit;
     cursor: pointer;
     touch-action: manipulation;
 }
-
 button:active {
     transform: scale(0.97);
 }
-
 button:focus-visible {
     outline: 2px solid var(--green);
     outline-offset: 3px;
 }
-
 #app {
     position: relative;
     min-height: 100vh;
+    min-height: 100dvh;
     overflow: hidden;
     background:
         radial-gradient(
-            ellipse at 85% 10%,
-            rgba(102, 151, 58, 0.14),
-            transparent 40%
+            ellipse at 85% 5%,
+            rgba(102, 151, 58, 0.16),
+            transparent 38%
         ),
         linear-gradient(160deg, #152019, #090e0a 75%);
 }
-
-/* HEADER */
-
+/* ========================================
+   INTRO / SPLASH SCREEN
+======================================== */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: #070b08;
+    opacity: 1;
+    visibility: visible;
+    transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+}
+.splash-screen.hidden {
+    display: none !important;
+}
+.splash-screen.splash-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.splash-background {
+    position: absolute;
+    inset: -20%;
+    background:
+        radial-gradient(
+            ellipse at 50% 42%,
+            rgba(125, 190, 58, 0.22),
+            transparent 32%
+        ),
+        radial-gradient(
+            ellipse at 50% 100%,
+            rgba(47, 91, 43, 0.2),
+            transparent 45%
+        ),
+        linear-gradient(
+            145deg,
+            #17251a 0%,
+            #080d09 55%,
+            #101b12 100%
+        );
+    animation: splashAtmosphere 7s ease-in-out infinite alternate;
+}
+.splash-background::before,
+.splash-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+.splash-background::before {
+    opacity: 0.25;
+    background-image:
+        linear-gradient(
+            rgba(183, 255, 74, 0.06) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(183, 255, 74, 0.06) 1px,
+            transparent 1px
+        );
+    background-size: 45px 45px;
+    transform: perspective(400px) rotateX(15deg) scale(1.2);
+}
+.splash-background::after {
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.15),
+            transparent 30%,
+            transparent 70%,
+            rgba(0, 0, 0, 0.65)
+        );
+}
+.splash-content {
+    position: relative;
+    z-index: 1;
+    width: min(88%, 420px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: splashEnter 0.9s ease both;
+}
+.splash-emblem {
+    position: relative;
+    width: 100px;
+    height: 112px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 28px;
+    clip-path: polygon(
+        50% 0,
+        94% 17%,
+        88% 70%,
+        50% 100%,
+        12% 70%,
+        6% 17%
+    );
+    background: var(--green);
+    filter: drop-shadow(0 0 28px rgba(183, 255, 74, 0.28));
+    animation: emblemPulse 2.4s ease-in-out infinite;
+}
+.splash-emblem::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    clip-path: polygon(
+        50% 0,
+        94% 17%,
+        88% 70%,
+        50% 100%,
+        12% 70%,
+        6% 17%
+    );
+    background: #111a12;
+}
+.splash-emblem span {
+    position: relative;
+    z-index: 1;
+    color: var(--green);
+    font-size: 65px;
+    font-weight: 1000;
+    font-style: italic;
+    text-shadow: 0 0 18px rgba(183, 255, 74, 0.24);
+}
+.splash-studio {
+    margin: 0 0 13px;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 4px;
+}
+.splash-title {
+    margin: 0;
+    font-size: clamp(30px, 8vw, 43px);
+    font-weight: 1000;
+    letter-spacing: 2px;
+    line-height: 1.15;
+}
+.splash-title span {
+    display: block;
+    margin-top: 4px;
+    color: var(--green);
+}
+.splash-subtitle {
+    margin: 17px 0 40px;
+    color: #d0ddca;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 4px;
+}
+.splash-loader {
+    width: min(100%, 270px);
+    height: 4px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+}
+.splash-loader-fill {
+    width: 35%;
+    height: 100%;
+    background: var(--green);
+    box-shadow: 0 0 15px rgba(183, 255, 74, 0.6);
+    animation: loadingProgress 2.3s ease-in-out forwards;
+}
+.splash-loading-text {
+    min-height: 13px;
+    margin: 15px 0 0;
+    color: var(--green);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+.splash-version {
+    position: absolute;
+    top: calc(100vh - 3px);
+    margin: 0;
+    color: #70806e;
+    font-size: 8px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+@keyframes splashAtmosphere {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.08);
+    }
+}
+@keyframes splashEnter {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes emblemPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.035);
+    }
+}
+@keyframes loadingProgress {
+    0% {
+        width: 0;
+    }
+    70% {
+        width: 78%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+/* ========================================
+   HEADER
+======================================== */
 .top-bar {
     position: relative;
     z-index: 2;
@@ -75,13 +296,11 @@ button:focus-visible {
     background: rgba(7, 12, 8, 0.94);
     border-bottom: 1px solid var(--border);
 }
-
 .brand {
     display: flex;
     align-items: center;
     gap: 12px;
 }
-
 .brand-icon {
     width: 44px;
     height: 44px;
@@ -93,23 +312,26 @@ button:focus-visible {
     font-size: 29px;
     font-weight: 1000;
     font-style: italic;
-    clip-path: polygon(0 0, 100% 0, 100% 75%, 75% 100%, 0 100%);
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 75%,
+        75% 100%,
+        0 100%
+    );
 }
-
 .brand h1 {
     margin: 0;
     font-size: 16px;
     font-weight: 1000;
     letter-spacing: 1.2px;
 }
-
 .brand p {
     margin: 5px 0 0;
     color: var(--green);
     font-size: 9px;
     letter-spacing: 3px;
 }
-
 .player-level {
     display: flex;
     align-items: center;
@@ -118,30 +340,37 @@ button:focus-visible {
     border: 1px solid var(--border);
     background: var(--panel);
 }
-
 .player-level span {
     color: var(--muted);
     font-size: 9px;
 }
-
 .player-level strong {
     color: var(--green);
     font-size: 19px;
 }
-
-/* MAIN LOBBY */
-
+/* ========================================
+   LOBBY
+======================================== */
 .lobby {
     width: 100%;
     max-width: 760px;
     margin: 0 auto;
     padding: 25px 17px 30px;
+    animation: lobbyEnter 0.55s ease both;
 }
-
+@keyframes lobbyEnter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .hero {
     padding: 20px 4px 23px;
 }
-
 .eyebrow {
     margin: 0;
     color: var(--green);
@@ -150,7 +379,6 @@ button:focus-visible {
     letter-spacing: 2px;
     line-height: 1.6;
 }
-
 .hero h2 {
     margin: 15px 0 12px;
     font-size: clamp(32px, 8vw, 48px);
@@ -158,11 +386,9 @@ button:focus-visible {
     font-weight: 1000;
     letter-spacing: -1.6px;
 }
-
 .hero h2 span {
     color: var(--green);
 }
-
 .subtitle {
     max-width: 350px;
     margin: 0;
@@ -170,9 +396,9 @@ button:focus-visible {
     font-size: 12px;
     line-height: 1.8;
 }
-
-/* PLAYER CARD */
-
+/* ========================================
+   PLAYER PROFILE
+======================================== */
 .player-card {
     display: flex;
     align-items: center;
@@ -184,7 +410,6 @@ button:focus-visible {
     border-radius: 7px;
     background: linear-gradient(110deg, #233225, #121a14);
 }
-
 .avatar {
     width: 52px;
     height: 52px;
@@ -195,31 +420,26 @@ button:focus-visible {
     background: #354b34;
     font-size: 27px;
 }
-
 .player-info {
     flex: 1;
     min-width: 0;
 }
-
 .player-info span {
     color: var(--green);
     font-size: 9px;
     letter-spacing: 1.5px;
 }
-
 .player-info h3 {
     margin: 5px 0;
     overflow-wrap: anywhere;
     font-size: 14px;
     letter-spacing: 1px;
 }
-
 .player-info p {
     margin: 0;
     color: var(--muted);
     font-size: 10px;
 }
-
 .small-button {
     padding: 9px 12px;
     border: 1px solid var(--border);
@@ -229,13 +449,12 @@ button:focus-visible {
     font-size: 10px;
     font-weight: 800;
 }
-
-/* SECTION HEADINGS */
-
+/* ========================================
+   SECTION HEADINGS
+======================================== */
 .selection-section {
     margin: 0 0 29px;
 }
-
 .section-heading {
     display: flex;
     justify-content: space-between;
@@ -243,80 +462,119 @@ button:focus-visible {
     gap: 12px;
     margin-bottom: 15px;
 }
-
 .section-heading h2 {
     margin: 5px 0 0;
     font-size: 19px;
     font-weight: 1000;
     letter-spacing: 0.5px;
 }
-
 .section-number {
     color: rgba(183, 255, 74, 0.48);
     font-size: 28px;
     font-weight: 1000;
 }
-
-/* CHARACTER PREVIEW */
-
+/* ========================================
+   3D CHARACTER PREVIEW
+======================================== */
 .character-preview {
+    position: relative;
     overflow: hidden;
     border: 1px solid var(--border);
     border-radius: 7px;
     background:
         radial-gradient(
-            ellipse at 50% 20%,
-            rgba(100, 143, 65, 0.22),
+            ellipse at 50% 25%,
+            rgba(100, 143, 65, 0.25),
             transparent 55%
         ),
         linear-gradient(150deg, #202e22, #111812);
 }
-
-.character-placeholder {
-    min-height: 225px;
-    padding: 28px 12px;
+.character-preview::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(
+            rgba(183, 255, 74, 0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(183, 255, 74, 0.035) 1px,
+            transparent 1px
+        );
+    background-size: 25px 25px;
+}
+.character-preview-canvas {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 300px;
+    min-height: 240px;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+.character-preview-canvas canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    outline: none;
+}
+.character-preview-label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-}
-
-.character-placeholder > span {
-    font-size: 74px;
-    filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.4));
-}
-
-.character-placeholder p {
-    margin: 14px 0 5px;
+    gap: 7px;
+    padding: 7px 9px;
+    border: 1px solid rgba(183, 255, 74, 0.17);
+    border-radius: 3px;
+    background: rgba(7, 12, 8, 0.75);
     color: var(--green);
-    font-size: 11px;
+    font-size: 8px;
     font-weight: 900;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
+    pointer-events: none;
 }
-
-.character-placeholder small {
-    color: var(--muted);
-    font-size: 10px;
+.online-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
 }
-
+.character-rotate-hint {
+    position: absolute;
+    z-index: 2;
+    right: 10px;
+    bottom: 77px;
+    color: rgba(244, 247, 239, 0.68);
+    font-size: 8px;
+    letter-spacing: 1px;
+    pointer-events: none;
+}
 .character-actions {
+    position: relative;
+    z-index: 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1px;
     background: var(--border);
     border-top: 1px solid var(--border);
 }
-
-/* MENU BUTTONS */
-
+/* ========================================
+   MENU BUTTONS
+======================================== */
 .menu-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-bottom: 25px;
 }
-
 .menu-button {
     min-width: 0;
     min-height: 104px;
@@ -330,45 +588,41 @@ button:focus-visible {
     border: 1px solid var(--border);
     border-radius: 5px;
     background: linear-gradient(140deg, #223025, #131b15);
-    transition: border-color 0.2s, background 0.2s;
+    transition:
+        border-color 0.2s,
+        background 0.2s;
 }
-
 .character-actions .menu-button {
     border: 0;
     border-radius: 0;
     background: #172219;
 }
-
 .menu-button > span {
     color: var(--green);
     font-size: 21px;
 }
-
 .menu-button strong {
     font-size: 10px;
     font-weight: 900;
     letter-spacing: 0.4px;
 }
-
 .menu-button small {
     color: var(--muted);
     font-size: 9px;
     line-height: 1.5;
 }
-
 .menu-button:hover {
     border-color: var(--green);
     background: #263829;
 }
-
-/* WEAPON GRID */
-
+/* ========================================
+   WEAPON GRID
+======================================== */
 .weapon-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
 }
-
 .weapon-card {
     position: relative;
     min-width: 0;
@@ -383,48 +637,44 @@ button:focus-visible {
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 6px;
     background: linear-gradient(145deg, #1c291f, #111812);
-    transition: border-color 0.2s, background 0.2s;
+    transition:
+        border-color 0.2s,
+        background 0.2s;
 }
-
 .weapon-card.selected {
     border-color: var(--green);
     background: linear-gradient(145deg, #2a3b27, #172118);
     box-shadow: inset 0 0 0 1px rgba(183, 255, 74, 0.08);
 }
-
 .weapon-image {
     min-height: 43px;
     display: grid;
     place-items: center;
     font-size: 35px;
 }
-
 .weapon-card strong {
     font-size: 10px;
     line-height: 1.4;
 }
-
 .weapon-card small {
     color: var(--muted);
     font-size: 8px;
     letter-spacing: 0.6px;
 }
-
 .info-note {
     margin: 11px 2px 0;
     color: #8b9b89;
     font-size: 10px;
     line-height: 1.7;
 }
-
-/* MAP GRID */
-
+/* ========================================
+   MAP GRID
+======================================== */
 .map-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 11px;
 }
-
 .map-card {
     position: relative;
     width: 100%;
@@ -438,12 +688,10 @@ button:focus-visible {
     border-radius: 6px;
     background: #172119;
 }
-
 .map-card.selected {
     border-color: var(--green);
     box-shadow: inset 0 0 0 1px rgba(183, 255, 74, 0.12);
 }
-
 .map-art {
     width: 38%;
     min-height: 105px;
@@ -451,24 +699,19 @@ button:focus-visible {
     place-items: center;
     flex-shrink: 0;
 }
-
 .map-art span {
     font-size: 39px;
     filter: drop-shadow(0 6px 7px rgba(0, 0, 0, 0.3));
 }
-
 .map-buner {
     background: linear-gradient(145deg, #577a4c, #233d29 70%);
 }
-
 .map-forest {
     background: linear-gradient(145deg, #335f42, #12291d 75%);
 }
-
 .map-desert {
     background: linear-gradient(145deg, #a67c45, #58432a 75%);
 }
-
 .map-details {
     flex: 1;
     min-width: 0;
@@ -478,18 +721,15 @@ button:focus-visible {
     justify-content: center;
     gap: 9px;
 }
-
 .map-details strong {
     font-size: 11px;
     letter-spacing: 0.5px;
 }
-
 .map-details small {
     color: var(--muted);
     font-size: 8px;
     line-height: 1.6;
 }
-
 .map-check {
     position: absolute;
     top: 8px;
@@ -504,39 +744,34 @@ button:focus-visible {
     font-size: 12px;
     font-weight: 1000;
 }
-
 .map-card.selected .map-check {
     display: grid;
 }
-
-/* START SECTION */
-
+/* ========================================
+   START SECTION
+======================================== */
 .start-section {
     padding: 17px;
     border: 1px solid var(--border);
     border-radius: 7px;
     background: linear-gradient(140deg, #1e2b20, #101711);
 }
-
 .selected-info {
     display: flex;
     flex-direction: column;
     gap: 6px;
     margin-bottom: 14px;
 }
-
 .selected-info span {
     color: var(--muted);
     font-size: 9px;
     letter-spacing: 1.5px;
 }
-
 .selected-info strong {
     color: var(--green);
     font-size: 14px;
     letter-spacing: 0.5px;
 }
-
 .start-button {
     width: 100%;
     min-height: 58px;
@@ -553,16 +788,13 @@ button:focus-visible {
     letter-spacing: 1.8px;
     box-shadow: 0 5px 22px rgba(183, 255, 74, 0.13);
 }
-
 .start-button span {
     font-size: 13px;
 }
-
 .start-button:disabled {
     opacity: 0.65;
     cursor: wait;
 }
-
 .footer-note {
     margin: 19px 0 0;
     color: #71816d;
@@ -570,15 +802,15 @@ button:focus-visible {
     font-size: 8px;
     letter-spacing: 1.5px;
 }
-
-/* GENERAL HIDDEN STATE */
-
+/* ========================================
+   HIDDEN STATE
+======================================== */
 .hidden {
     display: none !important;
 }
-
-/* GAME SCREEN */
-
+/* ========================================
+   GAME SCREEN
+======================================== */
 .game-screen {
     position: fixed;
     inset: 0;
@@ -587,7 +819,6 @@ button:focus-visible {
     background: #18251a;
     touch-action: none;
 }
-
 #gameCanvas {
     position: absolute;
     inset: 0;
@@ -595,16 +826,15 @@ button:focus-visible {
     height: 100%;
     overflow: hidden;
 }
-
 #gameCanvas canvas {
     display: block;
     width: 100%;
     height: 100%;
     touch-action: none;
 }
-
-/* GAME HUD */
-
+/* ========================================
+   GAME HUD
+======================================== */
 .game-top-hud {
     position: absolute;
     top: max(12px, env(safe-area-inset-top));
@@ -616,7 +846,6 @@ button:focus-visible {
     gap: 10px;
     pointer-events: none;
 }
-
 .hud-button {
     padding: 10px 13px;
     border: 1px solid var(--border);
@@ -627,7 +856,6 @@ button:focus-visible {
     font-weight: 900;
     pointer-events: auto;
 }
-
 .health-box {
     width: 115px;
     padding: 8px;
@@ -635,33 +863,29 @@ button:focus-visible {
     border-radius: 5px;
     background: rgba(8, 13, 9, 0.88);
 }
-
 .health-box > span {
     color: var(--green);
     font-size: 8px;
     letter-spacing: 1px;
 }
-
 .health-track {
     height: 6px;
     margin: 7px 0;
     overflow: hidden;
     background: #3a4439;
 }
-
 .health-fill {
     width: 100%;
     height: 100%;
     background: var(--green);
     transition: width 0.2s;
 }
-
 .health-box strong {
     font-size: 10px;
 }
-
-/* COUNTDOWN */
-
+/* ========================================
+   COUNTDOWN
+======================================== */
 .start-countdown {
     position: absolute;
     inset: 0;
@@ -674,22 +898,20 @@ button:focus-visible {
     text-align: center;
     pointer-events: none;
 }
-
 .start-countdown > span {
     color: var(--green);
     font-size: clamp(65px, 18vw, 110px);
     font-weight: 1000;
     text-shadow: 0 0 30px rgba(183, 255, 74, 0.3);
 }
-
 .start-countdown p {
     font-size: 11px;
     font-weight: 900;
     letter-spacing: 3px;
 }
-
-/* MESSAGE AND CROSSHAIR */
-
+/* ========================================
+   MESSAGE / CROSSHAIR
+======================================== */
 .game-message {
     position: absolute;
     top: 78px;
@@ -704,7 +926,6 @@ button:focus-visible {
     white-space: nowrap;
     pointer-events: none;
 }
-
 .crosshair {
     position: absolute;
     top: 50%;
@@ -715,9 +936,9 @@ button:focus-visible {
     font-weight: 300;
     pointer-events: none;
 }
-
-/* MOBILE CONTROLS */
-
+/* ========================================
+   MOBILE CONTROLS
+======================================== */
 .mobile-controls {
     position: absolute;
     left: 0;
@@ -730,7 +951,6 @@ button:focus-visible {
     gap: 12px;
     pointer-events: none;
 }
-
 .joystick {
     position: relative;
     width: clamp(82px, 19vw, 116px);
@@ -742,7 +962,6 @@ button:focus-visible {
     pointer-events: auto;
     touch-action: none;
 }
-
 .joystick-knob {
     position: absolute;
     top: 50%;
@@ -755,7 +974,6 @@ button:focus-visible {
     background: rgba(183, 255, 74, 0.25);
     pointer-events: none;
 }
-
 .action-buttons {
     display: flex;
     justify-content: flex-end;
@@ -765,7 +983,6 @@ button:focus-visible {
     max-width: 55%;
     pointer-events: auto;
 }
-
 .action-button {
     min-width: 49px;
     min-height: 43px;
@@ -778,25 +995,21 @@ button:focus-visible {
     font-weight: 900;
     touch-action: manipulation;
 }
-
 .action-button:active,
 .action-button.active {
     background: var(--green);
     color: #10170c;
 }
-
 #fireButton {
     width: 58px;
     height: 58px;
     border-color: rgba(255, 75, 75, 0.8);
     color: #ff7777;
 }
-
 #runButton {
     width: 53px;
     height: 53px;
 }
-
 .look-hint {
     position: absolute;
     bottom: 133px;
@@ -808,9 +1021,9 @@ button:focus-visible {
     white-space: nowrap;
     pointer-events: none;
 }
-
-/* MODAL */
-
+/* ========================================
+   MODAL
+======================================== */
 .modal {
     position: fixed;
     inset: 0;
@@ -820,26 +1033,24 @@ button:focus-visible {
     padding: 18px;
     background: rgba(0, 0, 0, 0.8);
 }
-
 .modal-card {
     position: relative;
     width: 100%;
     max-width: 390px;
     max-height: 82vh;
+    max-height: 82dvh;
     overflow-y: auto;
     padding: 26px 20px 22px;
     border: 1px solid var(--border);
     border-radius: 8px;
     background: #152019;
 }
-
 .modal-card h2 {
     margin: 0 35px 20px 0;
     color: var(--green);
     font-size: 20px;
     letter-spacing: 1px;
 }
-
 .close-button {
     position: absolute;
     top: 12px;
@@ -851,20 +1062,17 @@ button:focus-visible {
     background: transparent;
     color: var(--green);
 }
-
 #modalContent {
     color: var(--white);
     font-size: 12px;
     line-height: 1.7;
 }
-
 #modalContent button,
 #modalContent input,
 #modalContent select {
     max-width: 100%;
     margin-top: 8px;
 }
-
 #modalContent input,
 #modalContent select {
     width: 100%;
@@ -874,7 +1082,6 @@ button:focus-visible {
     background: #0e160f;
     color: var(--white);
 }
-
 #modalContent button {
     padding: 11px 14px;
     border: 1px solid var(--border);
@@ -882,145 +1089,141 @@ button:focus-visible {
     background: var(--panel2);
     color: var(--green);
 }
-
-/* LANDSCAPE GAME LAYOUT */
-
+/* ========================================
+   LANDSCAPE GAME LAYOUT
+======================================== */
 @media (orientation: landscape) and (max-height: 600px) {
     .game-top-hud {
         top: max(7px, env(safe-area-inset-top));
         left: max(10px, env(safe-area-inset-left));
         right: max(10px, env(safe-area-inset-right));
     }
-
     .mobile-controls {
         bottom: max(8px, env(safe-area-inset-bottom));
         padding: 0 20px;
     }
-
     .joystick {
         width: 88px;
         height: 88px;
     }
-
     .action-buttons {
         max-width: 52%;
         gap: 6px;
     }
-
     .action-button {
         min-width: 43px;
         min-height: 38px;
         padding: 6px;
         font-size: 7px;
     }
-
     #fireButton {
         width: 48px;
         height: 48px;
     }
-
     #runButton {
         width: 45px;
         height: 45px;
     }
-
     .look-hint {
         bottom: 103px;
         font-size: 7px;
     }
-
     .game-message {
         top: 58px;
     }
+    .character-preview-canvas {
+        height: 245px;
+    }
 }
-
-/* TABLET AND DESKTOP */
-
+/* ========================================
+   TABLET / DESKTOP
+======================================== */
 @media (min-width: 700px) {
     .lobby {
         padding-top: 38px;
     }
-
     .hero {
         padding-top: 28px;
     }
-
     .weapon-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-
     .map-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-
     .map-card {
         min-height: 150px;
         flex-direction: column;
     }
-
     .map-art {
         width: 100%;
         min-height: 95px;
     }
-
     .map-details {
         padding: 12px;
     }
+    .character-preview-canvas {
+        height: 360px;
+    }
 }
-
-/* SMALL PHONES */
-
+/* ========================================
+   SMALL PHONES
+======================================== */
 @media (max-width: 360px) {
     .top-bar {
         padding: 12px;
     }
-
     .brand {
         gap: 8px;
     }
-
     .brand h1 {
         font-size: 13px;
     }
-
     .brand p {
         font-size: 8px;
         letter-spacing: 2px;
     }
-
     .player-level {
         padding: 7px;
     }
-
     .lobby {
         padding-right: 12px;
         padding-left: 12px;
     }
-
     .hero h2 {
         font-size: 31px;
     }
-
     .weapon-card {
         min-height: 120px;
     }
-
     .mobile-controls {
         padding: 0 9px;
     }
-
     .action-buttons {
         gap: 4px;
     }
-
     .action-button {
         min-width: 42px;
         min-height: 38px;
         padding: 5px;
         font-size: 7px;
     }
+    .character-preview-canvas {
+        height: 260px;
+    }
+    .splash-title {
+        font-size: 30px;
+    }
+    .splash-studio {
+        letter-spacing: 2.5px;
+    }
+    .splash-subtitle {
+        letter-spacing: 2.5px;
+    }
 }
-
+/* ========================================
+   REDUCED MOTION
+======================================== */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1028,5 +1231,6 @@ button:focus-visible {
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
     }
 }
