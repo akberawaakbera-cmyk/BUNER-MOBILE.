@@ -2,98 +2,578 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#101810">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    >
+
+    <meta name="theme-color" content="#101710">
+
+    <meta
+        name="description"
+        content="BUNER MOBILE - A 3D battle royale game prototype."
+    >
+
     <title>BUNER MOBILE</title>
+
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
+
 <div id="app">
+
+    <!-- =========================
+         TOP HEADER
+    ========================== -->
+
     <header class="top-bar">
+
         <div class="brand">
-            <span class="brand-icon">B</span>
+            <div class="brand-icon">B</div>
+
             <div>
                 <h1>BUNER MOBILE</h1>
                 <p>BATTLE SURVIVAL</p>
             </div>
         </div>
+
         <div class="player-level">
-            <span>LVL</span>
+            <span>LEVEL</span>
             <strong id="playerLevel">01</strong>
         </div>
+
     </header>
+
+
+    <!-- =========================
+         MAIN LOBBY
+    ========================== -->
+
     <main id="lobby" class="lobby">
-        <div class="hero">
-            <p class="eyebrow">WELCOME TO THE BATTLEFIELD</p>
-            <h2>YOUR BATTLE.<br><span>YOUR LEGACY.</span></h2>
-            <p class="subtitle">Prepare yourself. Your survival starts here.</p>
-        </div>
-        <div class="player-card">
+
+        <section class="hero">
+
+            <p class="eyebrow">
+                WELCOME TO THE BATTLEFIELD
+            </p>
+
+            <h2>
+                YOUR BATTLE.<br>
+                <span>YOUR LEGACY.</span>
+            </h2>
+
+            <p class="subtitle">
+                Choose your fighter, prepare your weapons,
+                select your battlefield and survive.
+            </p>
+
+        </section>
+
+
+        <!-- PLAYER PROFILE -->
+
+        <section class="player-card">
+
             <div class="avatar">👤</div>
+
             <div class="player-info">
-                <span>PLAYER</span>
+
+                <span>YOUR CHARACTER</span>
+
                 <h3 id="playerName">SURVIVOR</h3>
-                <p>Rookie Warrior</p>
+
+                <p id="playerStatus">
+                    Rookie Warrior
+                </p>
+
             </div>
-            <button id="editProfile" class="small-button">EDIT</button>
-        </div>
-        <div class="menu-grid">
-            <button id="characterButton" class="menu-button">
-                <span>♟</span>
-                <strong>CHARACTER</strong>
-                <small>Choose your fighter</small>
+
+            <button
+                id="editProfile"
+                class="small-button"
+                type="button"
+            >
+                EDIT
             </button>
-            <button id="loadoutButton" class="menu-button">
-                <span>⚔</span>
-                <strong>LOADOUT</strong>
-                <small>Prepare equipment</small>
-            </button>
-            <button id="settingsButton" class="menu-button">
-                <span>⚙</span>
-                <strong>SETTINGS</strong>
-                <small>Customize your game</small>
-            </button>
-        </div>
-        <button id="startButton" class="start-button">
-            <span>▶</span> START BATTLE
-        </button>
-        <p class="footer-note">BUNER MOBILE · EARLY DEVELOPMENT</p>
-    </main>
-    <section id="gameScreen" class="game-screen hidden">
-        <div id="gameCanvas"></div>
-        <div class="game-top-hud">
-            <button id="exitButton" class="hud-button">✕ EXIT</button>
-            <div class="health-box">
-                <span>HEALTH</span>
-                <div class="health-track">
-                    <div id="healthBar" class="health-fill"></div>
+
+        </section>
+
+
+        <!-- CHARACTER PREVIEW -->
+
+        <section class="selection-section">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR FIGHTER</p>
+                    <h2>CHARACTER</h2>
                 </div>
-                <strong id="healthText">100</strong>
+
+                <span class="section-number">01</span>
             </div>
+
+            <div class="character-preview">
+
+                <div class="character-placeholder">
+                    <span>🧍</span>
+                    <p>3D CHARACTER PREVIEW</p>
+                    <small>
+                        Character model will appear here
+                    </small>
+                </div>
+
+                <div class="character-actions">
+
+                    <button
+                        id="characterButton"
+                        class="menu-button"
+                        type="button"
+                    >
+                        <span>♟</span>
+                        <strong>SELECT CHARACTER</strong>
+                        <small>Choose your fighter</small>
+                    </button>
+
+                    <button
+                        id="emoteButton"
+                        class="menu-button"
+                        type="button"
+                    >
+                        <span>🕺</span>
+                        <strong>EMOTES</strong>
+                        <small>Choose an animation</small>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- WEAPON SELECTION -->
+
+        <section class="selection-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">PREPARE FOR COMBAT</p>
+                    <h2>WEAPON LOADOUT</h2>
+                </div>
+
+                <span class="section-number">02</span>
+
+            </div>
+
+            <div class="weapon-grid">
+
+                <button
+                    class="weapon-card selected"
+                    data-weapon="rifle"
+                    type="button"
+                >
+                    <div class="weapon-image">🔫</div>
+                    <strong>ASSAULT RIFLE</strong>
+                    <small>PRIMARY WEAPON</small>
+                </button>
+
+                <button
+                    class="weapon-card"
+                    data-weapon="sniper"
+                    type="button"
+                >
+                    <div class="weapon-image">🎯</div>
+                    <strong>SNIPER</strong>
+                    <small>LONG RANGE</small>
+                </button>
+
+                <button
+                    class="weapon-card"
+                    data-weapon="shotgun"
+                    type="button"
+                >
+                    <div class="weapon-image">💥</div>
+                    <strong>SHOTGUN</strong>
+                    <small>CLOSE RANGE</small>
+                </button>
+
+                <button
+                    class="weapon-card"
+                    data-weapon="smg"
+                    type="button"
+                >
+                    <div class="weapon-image">🔫</div>
+                    <strong>SMG</strong>
+                    <small>FAST FIRE</small>
+                </button>
+
+                <button
+                    class="weapon-card"
+                    data-weapon="pistol"
+                    type="button"
+                >
+                    <div class="weapon-image">🔫</div>
+                    <strong>PISTOL</strong>
+                    <small>SECONDARY</small>
+                </button>
+
+                <button
+                    id="loadoutButton"
+                    class="weapon-card"
+                    type="button"
+                >
+                    <div class="weapon-image">🎒</div>
+                    <strong>LOADOUT</strong>
+                    <small>YOUR EQUIPMENT</small>
+                </button>
+
+            </div>
+
+            <p class="info-note">
+                Weapon icons are placeholders. Real 3D weapon models
+                will be added in a later development stage.
+            </p>
+
+        </section>
+
+
+        <!-- MAP SELECTION -->
+
+        <section class="selection-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">CHOOSE YOUR BATTLEFIELD</p>
+                    <h2>SELECT MAP</h2>
+                </div>
+
+                <span class="section-number">03</span>
+
+            </div>
+
+            <div class="map-grid">
+
+                <button
+                    class="map-card selected"
+                    data-map="buner"
+                    type="button"
+                >
+
+                    <div class="map-art map-buner">
+                        <span>🏔️</span>
+                    </div>
+
+                    <div class="map-details">
+                        <strong>BUNER VALLEY</strong>
+                        <small>HILLS · VILLAGE · FOREST</small>
+                    </div>
+
+                    <span class="map-check">✓</span>
+
+                </button>
+
+
+                <button
+                    class="map-card"
+                    data-map="forest"
+                    type="button"
+                >
+
+                    <div class="map-art map-forest">
+                        <span>🌲</span>
+                    </div>
+
+                    <div class="map-details">
+                        <strong>FOREST ZONE</strong>
+                        <small>FOREST · HILLS · ROADS</small>
+                    </div>
+
+                    <span class="map-check">✓</span>
+
+                </button>
+
+
+                <button
+                    class="map-card"
+                    data-map="desert"
+                    type="button"
+                >
+
+                    <div class="map-art map-desert">
+                        <span>🏜️</span>
+                    </div>
+
+                    <div class="map-details">
+                        <strong>DESERT OUTPOST</strong>
+                        <small>ROCKS · OPEN TERRAIN</small>
+                    </div>
+
+                    <span class="map-check">✓</span>
+
+                </button>
+
+            </div>
+
+            <p class="info-note">
+                Additional maps will require their own 3D terrain,
+                buildings and environment assets.
+            </p>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+
+        <section class="menu-grid">
+
+            <button
+                id="settingsButton"
+                class="menu-button"
+                type="button"
+            >
+                <span>⚙️</span>
+                <strong>SETTINGS</strong>
+                <small>Graphics and controls</small>
+            </button>
+
+            <button
+                id="inventoryButton"
+                class="menu-button"
+                type="button"
+            >
+                <span>🎒</span>
+                <strong>INVENTORY</strong>
+                <small>Available equipment</small>
+            </button>
+
+        </section>
+
+
+        <!-- START BATTLE -->
+
+        <section class="start-section">
+
+            <div class="selected-info">
+
+                <span>SELECTED MAP</span>
+
+                <strong id="selectedMapName">
+                    BUNER VALLEY
+                </strong>
+
+            </div>
+
+            <button
+                id="startButton"
+                class="start-button"
+                type="button"
+            >
+                <span>▶</span>
+                START BATTLE
+            </button>
+
+            <p class="footer-note">
+                BUNER MOBILE · DEVELOPMENT BUILD
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         GAME SCREEN
+    ========================== -->
+
+    <section id="gameScreen" class="game-screen hidden">
+
+        <div id="gameCanvas"></div>
+
+
+        <!-- GAME HUD -->
+
+        <div class="game-top-hud">
+
+            <button
+                id="exitButton"
+                class="hud-button"
+                type="button"
+            >
+                ✕ EXIT
+            </button>
+
+            <div class="health-box">
+
+                <span>HEALTH</span>
+
+                <div class="health-track">
+                    <div
+                        id="healthBar"
+                        class="health-fill"
+                    ></div>
+                </div>
+
+                <strong id="healthText">100</strong>
+
+            </div>
+
         </div>
-        <div class="game-message" id="gameMessage">
+
+
+        <!-- START COUNTDOWN -->
+
+        <div
+            id="startCountdown"
+            class="start-countdown hidden"
+        >
+            <span id="countdownNumber">3</span>
+            <p>PREPARE FOR BATTLE</p>
+        </div>
+
+
+        <!-- GAME MESSAGE -->
+
+        <div
+            id="gameMessage"
+            class="game-message"
+        >
             BUNER MOBILE
         </div>
+
+
+        <!-- CROSSHAIR -->
+
+        <div
+            id="crosshair"
+            class="crosshair"
+        >
+            +
+        </div>
+
+
+        <!-- LEFT JOYSTICK -->
+
         <div class="mobile-controls">
-            <div id="joystick" class="joystick">
-                <div id="joystickKnob" class="joystick-knob"></div>
+
+            <div
+                id="joystick"
+                class="joystick"
+            >
+                <div
+                    id="joystickKnob"
+                    class="joystick-knob"
+                ></div>
             </div>
+
+
+            <!-- RIGHT-SIDE ACTION BUTTONS -->
+
             <div class="action-buttons">
-                <button id="jumpButton" class="action-button">JUMP</button>
-                <button id="runButton" class="action-button">RUN</button>
+
+                <button
+                    id="crouchButton"
+                    class="action-button"
+                    type="button"
+                >
+                    CROUCH
+                </button>
+
+                <button
+                    id="reloadButton"
+                    class="action-button"
+                    type="button"
+                >
+                    RELOAD
+                </button>
+
+                <button
+                    id="aimButton"
+                    class="action-button"
+                    type="button"
+                >
+                    AIM
+                </button>
+
+                <button
+                    id="jumpButton"
+                    class="action-button"
+                    type="button"
+                >
+                    JUMP
+                </button>
+
+                <button
+                    id="runButton"
+                    class="action-button"
+                    type="button"
+                >
+                    RUN
+                </button>
+
+                <button
+                    id="fireButton"
+                    class="action-button fire-button"
+                    type="button"
+                >
+                    FIRE
+                </button>
+
             </div>
+
         </div>
-        <div class="look-hint">Drag the screen to look around</div>
+
+
+        <div class="look-hint">
+            DRAG RIGHT SIDE TO LOOK AROUND
+        </div>
+
     </section>
-    <div id="modal" class="modal hidden">
+
+
+    <!-- =========================
+         MODAL DIALOG
+    ========================== -->
+
+    <div
+        id="modal"
+        class="modal hidden"
+    >
+
         <div class="modal-card">
-            <button id="closeModal" class="close-button">✕</button>
-            <h2 id="modalTitle">SETTINGS</h2>
+
+            <button
+                id="closeModal"
+                class="close-button"
+                type="button"
+            >
+                ✕
+            </button>
+
+            <h2 id="modalTitle">
+                BUNER MOBILE
+            </h2>
+
             <div id="modalContent"></div>
+
         </div>
+
     </div>
+
+
+    <!-- THREE.JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+    <!-- GAME LOGIC -->
+
+    <script src="game.js"></script>
+
 </div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="game.js"></script>
+
 </body>
 </html>
