@@ -1,1 +1,544 @@
-hshshs
+:root {
+–bg: #101810;
+–panel: #19251b;
+–panel-light: #223126;
+–green: #b7ff4a;
+–green-dark: #6f9e28;
+–white: #f3f6ed;
+–muted: #98a595;
+–border: rgba(183, 255, 74, 0.22);
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    }
+
+html,
+body {
+width: 100%;
+min-height: 100%;
+margin: 0;
+background: var(–bg);
+color: var(–white);
+font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+button {
+color: inherit;
+font: inherit;
+cursor: pointer;
+touch-action: manipulation;
+}
+
+button:active {
+transform: scale(0.97);
+}
+
+#app {
+min-height: 100vh;
+position: relative;
+overflow: hidden;
+background:
+radial-gradient(ellipse at 80% 20%, rgba(79, 117, 45, 0.15), transparent 45%),
+linear-gradient(155deg, #172218, #0d120e 70%);
+}
+
+.top-bar {
+width: 100%;
+min-height: 78px;
+padding: 15px 18px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-bottom: 1px solid var(–border);
+background: rgba(8, 13, 9, 0.75);
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.brand-icon {
+width: 43px;
+height: 43px;
+display: grid;
+place-items: center;
+background: var(–green);
+color: #11180d;
+font-size: 27px;
+font-weight: 1000;
+font-style: italic;
+clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+
+.brand h1 {
+margin: 0;
+font-size: 17px;
+font-weight: 900;
+letter-spacing: 1.3px;
+}
+
+.brand p {
+margin: 5px 0 0;
+color: var(–green);
+font-size: 9px;
+letter-spacing: 3px;
+}
+
+.player-level {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 9px 12px;
+border: 1px solid var(–border);
+background: var(–panel);
+font-size: 11px;
+color: var(–muted);
+}
+
+.player-level strong {
+color: var(–green);
+font-size: 19px;
+}
+
+.lobby {
+width: 100%;
+max-width: 620px;
+margin: 0 auto;
+padding: 28px 18px 20px;
+}
+
+.hero {
+min-height: 180px;
+padding: 18px 5px;
+}
+
+.eyebrow {
+color: var(–green);
+font-size: 10px;
+font-weight: bold;
+letter-spacing: 2px;
+}
+
+.hero h2 {
+margin: 18px 0 12px;
+font-size: clamp(30px, 8vw, 43px);
+line-height: 1.05;
+font-weight: 1000;
+letter-spacing: -1.5px;
+}
+
+.hero h2 span {
+color: var(–green);
+}
+
+.subtitle {
+max-width: 300px;
+color: var(–muted);
+font-size: 13px;
+line-height: 1.6;
+}
+
+.player-card {
+min-height: 88px;
+margin: 12px 0 22px;
+padding: 14px;
+display: flex;
+align-items: center;
+gap: 13px;
+background: linear-gradient(110deg, var(–panel-light), var(–panel));
+border: 1px solid var(–border);
+border-radius: 8px;
+}
+
+.avatar {
+width: 49px;
+height: 49px;
+display: grid;
+place-items: center;
+border-radius: 6px;
+background: #344532;
+font-size: 26px;
+}
+
+.player-info {
+flex: 1;
+min-width: 0;
+}
+
+.player-info span {
+color: var(–green);
+font-size: 9px;
+letter-spacing: 2px;
+}
+
+.player-info h3 {
+margin: 5px 0;
+font-size: 15px;
+letter-spacing: 1px;
+}
+
+.player-info p {
+margin: 0;
+color: var(–muted);
+font-size: 11px;
+}
+
+.small-button {
+padding: 9px 12px;
+border: 1px solid var(–border);
+border-radius: 4px;
+background: transparent;
+color: var(–green);
+font-size: 10px;
+font-weight: bold;
+}
+
+.menu-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 11px;
+}
+
+.menu-button {
+min-height: 108px;
+padding: 14px;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+justify-content: center;
+gap: 7px;
+text-align: left;
+border: 1px solid var(–border);
+border-radius: 7px;
+background: linear-gradient(140deg, #223025, #151e17);
+transition: border-color 0.2s, background 0.2s;
+}
+
+.menu-button:hover {
+border-color: var(–green);
+background: #263727;
+}
+
+.menu-button > span {
+color: var(–green);
+font-size: 22px;
+}
+
+.menu-button strong {
+font-size: 12px;
+letter-spacing: 0.7px;
+}
+
+.menu-button small {
+color: var(–muted);
+font-size: 10px;
+}
+
+.start-button {
+width: 100%;
+min-height: 59px;
+margin-top: 22px;
+border: none;
+border-radius: 5px;
+background: var(–green);
+color: #121a0d;
+font-size: 15px;
+font-weight: 1000;
+letter-spacing: 2px;
+box-shadow: 0 5px 24px rgba(183, 255, 74, 0.13);
+}
+
+.start-button span {
+margin-right: 8px;
+}
+
+.footer-note {
+margin: 23px 0 0;
+text-align: center;
+color: #657260;
+font-size: 9px;
+letter-spacing: 2px;
+}
+
+.hidden {
+display: none !important;
+}
+
+.game-screen {
+position: fixed;
+inset: 0;
+z-index: 10;
+overflow: hidden;
+background: #18241a;
+}
+
+#gameCanvas {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+}
+
+#gameCanvas canvas {
+display: block;
+width: 100%;
+height: 100%;
+touch-action: none;
+}
+
+.game-top-hud {
+position: absolute;
+top: max(15px, env(safe-area-inset-top));
+left: 14px;
+right: 14px;
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+pointer-events: none;
+}
+
+.hud-button {
+padding: 11px 14px;
+background: rgba(10, 15, 10, 0.85);
+border: 1px solid var(–border);
+border-radius: 5px;
+color: var(–green);
+font-size: 11px;
+font-weight: bold;
+pointer-events: auto;
+}
+
+.health-box {
+width: 120px;
+padding: 9px;
+background: rgba(10, 15, 10, 0.85);
+border: 1px solid var(–border);
+border-radius: 5px;
+}
+
+.health-box > span {
+font-size: 9px;
+color: var(–green);
+letter-spacing: 1px;
+}
+
+.health-track {
+height: 6px;
+margin: 7px 0;
+background: #3b4539;
+overflow: hidden;
+}
+
+.health-fill {
+width: 100%;
+height: 100%;
+background: var(–green);
+transition: width 0.2s;
+}
+
+.health-box strong {
+font-size: 11px;
+}
+
+.game-message {
+position: absolute;
+top: 85px;
+left: 50%;
+transform: translateX(-50%);
+padding: 8px 13px;
+background: rgba(10, 15, 10, 0.65);
+color: var(–green);
+font-size: 10px;
+letter-spacing: 2px;
+white-space: nowrap;
+pointer-events: none;
+}
+
+.mobile-controls {
+position: absolute;
+left: 0;
+right: 0;
+bottom: max(25px, env(safe-area-inset-bottom));
+padding: 0 22px;
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+pointer-events: none;
+}
+
+.joystick {
+width: 112px;
+height: 112px;
+border: 2px solid rgba(255, 255, 255, 0.35);
+border-radius: 50%;
+background: rgba(10, 15, 10, 0.4);
+position: relative;
+pointer-events: auto;
+touch-action: none;
+}
+
+.joystick-knob {
+position: absolute;
+width: 44px;
+height: 44px;
+left: 32px;
+top: 32px;
+border: 2px solid rgba(183, 255, 74, 0.8);
+border-radius: 50%;
+background: rgba(183, 255, 74, 0.25);
+}
+
+.action-buttons {
+display: flex;
+gap: 9px;
+align-items: flex-end;
+pointer-events: auto;
+}
+
+.action-button {
+min-width: 61px;
+min-height: 48px;
+padding: 10px;
+border: 1px solid var(–border);
+border-radius: 50%;
+background: rgba(10, 15, 10, 0.75);
+color: var(–green);
+font-size: 10px;
+font-weight: bold;
+}
+
+#runButton {
+width: 58px;
+height: 58px;
+}
+
+.look-hint {
+position: absolute;
+bottom: 150px;
+left: 50%;
+transform: translateX(-50%);
+color: rgba(255, 255, 255, 0.75);
+font-size: 10px;
+white-space: nowrap;
+pointer-events: none;
+}
+
+.modal {
+position: fixed;
+inset: 0;
+z-index: 30;
+display: grid;
+place-items: center;
+padding: 20px;
+background: rgba(0, 0, 0, 0.78);
+}
+
+.modal-card {
+position: relative;
+width: 100%;
+max-width: 390px;
+max-height: 80vh;
+overflow-y: auto;
+padding: 27px 20px 22px;
+border: 1px solid var(–border);
+border-radius: 9px;
+background: #172219;
+}
+
+.modal-card h2 {
+margin: 0 0 22px;
+color: var(–green);
+font-size: 21px;
+letter-spacing: 1px;
+}
+
+.close-button {
+position: absolute;
+top: 13px;
+right: 13px;
+width: 32px;
+height: 32px;
+border: 1px solid var(–border);
+border-radius: 4px;
+background: transparent;
+color: var(–green);
+}
+
+#modalContent {
+color: var(–white);
+font-size: 13px;
+line-height: 1.6;
+}
+
+#modalContent button,
+#modalContent input,
+#modalContent select {
+max-width: 100%;
+margin-top: 8px;
+}
+
+#modalContent input,
+#modalContent select {
+width: 100%;
+padding: 12px;
+border: 1px solid var(–border);
+border-radius: 5px;
+background: #0e160f;
+color: var(–white);
+}
+
+#modalContent button {
+padding: 11px 14px;
+border: 1px solid var(–border);
+border-radius: 5px;
+background: var(–panel-light);
+color: var(–green);
+}
+
+@media (min-width: 700px) {
+.lobby {
+padding-top: 45px;
+}
+
+.hero {
+    min-height: 210px;
+}
+.menu-button {
+    min-height: 120px;
+}
+
+}
+
+@media (max-height: 650px) {
+.lobby {
+padding-top: 12px;
+}
+
+.hero {
+    min-height: 140px;
+    padding-top: 8px;
+}
+.hero h2 {
+    margin: 10px 0;
+    font-size: 30px;
+}
+.player-card {
+    margin: 8px 0 14px;
+}
+.menu-button {
+    min-height: 85px;
+}
+.start-button {
+    margin-top: 13px;
+}
+
+}
