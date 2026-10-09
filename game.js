@@ -992,26 +992,102 @@
     }
 
     function createPlayer() {
-        player = new THREE.Group();
+    player = new THREE.Group();
 
-        player.position.set(
-            0,
-            terrainHeight(0, 4),
-            4
-        );
+    player.position.set(
+        0,
+        terrainHeight(0, 4),
+        4
+    );
 
-        const model = buildCharacterModel(player);
+    // Keep the original character as a fallback.
+    const fallback = buildCharacterModel(player);
 
-        playerBody = model.bodyPivot;
-        playerGun = model.gun;
-        muzzleFlash = model.flash;
+    playerBody = fallback.bodyPivot;
+    playerGun = fallback.gun;
+    muzzleFlash = fallback.flash;
+    player.userData.model = fallback;
 
-        player.userData.model = model;
+    scene.add(player);
+    updateWeaponAppearance();
 
-        scene.add(player);
-
-        updateWeaponAppearance();
+    // Load the custom 3D character.
+    if (typeof window.GLTFLoader !== "function") {
+        console.error("GLTFLoader is not available.");
+        setMessage("3D MODEL LOADER ERROR");
+        return;
     }
+
+    const loader = new window.GLTFLoader();
+
+    loader.load(
+        "./player.glb",
+
+        function (gltf) {
+            if (!player || !scene) return;
+
+            const character = gltf.scene;
+
+            // Measure the imported model.
+            const box = new THREE.Box3().setFromObject(character);
+            const size = box.getSize(new THREE.Vector3());
+
+            if (size.y <= 0) {
+                console.error("The GLB model has invalid dimensions.");
+                return;
+            }
+
+            // Resize the model to approximately 2.2 units tall.
+            const scale = 2.2 / size.y;
+            character.scale.setScalar(scale);
+
+            // Center the model and place its feet at ground level.
+            const scaledBox = new THREE.Box3().setFromObject(character);
+            const center = scaledBox.getCenter(new THREE.Vector3());
+
+            character.position.x -= center.x;
+            character.position.z -= center.z;
+            character.position.y -= scaledBox.min.y;
+
+            // Preserve the weapon while replacing the old character.
+            const weapon = fallback.gun;
+            const flash = fallback.flash;
+
+            if (weapon.parent) {
+                weapon.parent.remove(weapon);
+            }
+
+            player.remove(fallback.root);
+
+            const characterRoot = new THREE.Group();
+            characterRoot.add(character);
+            player.add(characterRoot);
+
+            player.add(weapon);
+
+            weapon.position.set(0.36, 1.42, -0.36);
+
+            playerBody = characterRoot;
+            playerGun = weapon;
+            muzzleFlash = flash;
+
+            // The imported model does not use the old procedural limbs.
+            player.userData.model = null;
+
+            updateWeaponAppearance();
+
+            console.log("BUNER MOBILE: Custom GLB character loaded.");
+            setMessage("CUSTOM CHARACTER LOADED");
+        },
+
+        undefined,
+
+        function (error) {
+            console.error("Could not load player.glb:", error);
+            setMessage("3D MODEL FAILED TO LOAD");
+        }
+    );
+}
 
     // ==========================================
     // WEAPON APPEARANCE
