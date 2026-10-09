@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#101810">
+    <title>BUNER MOBILE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+    <header class="top-bar">
+        <div class="brand">
+            <span class="brand-icon">B</span>
+            <div>
+                <h1>BUNER MOBILE</h1>
+                <p>BATTLE SURVIVAL</p>
+            </div>
+        </div>
+        <div class="player-level">
+            <span>LVL</span>
+            <strong id="playerLevel">01</strong>
+        </div>
+    </header>
+    <main id="lobby" class="lobby">
+        <div class="hero">
+            <p class="eyebrow">WELCOME TO THE BATTLEFIELD</p>
+            <h2>YOUR BATTLE.<br><span>YOUR LEGACY.</span></h2>
+            <p class="subtitle">Prepare yourself. Your survival starts here.</p>
+        </div>
+        <div class="player-card">
+            <div class="avatar">👤</div>
+            <div class="player-info">
+                <span>PLAYER</span>
+                <h3 id="playerName">SURVIVOR</h3>
+                <p>Rookie Warrior</p>
+            </div>
+            <button id="editProfile" class="small-button">EDIT</button>
+        </div>
+        <div class="menu-grid">
+            <button id="characterButton" class="menu-button">
+                <span>♟</span>
+                <strong>CHARACTER</strong>
+                <small>Choose your fighter</small>
+            </button>
+            <button id="loadoutButton" class="menu-button">
+                <span>⚔</span>
+                <strong>LOADOUT</strong>
+                <small>Prepare equipment</small>
+            </button>
+            <button id="settingsButton" class="menu-button">
+                <span>⚙</span>
+                <strong>SETTINGS</strong>
+                <small>Customize your game</small>
+            </button>
+        </div>
+        <button id="startButton" class="start-button">
+            <span>▶</span> START BATTLE
+        </button>
+        <p class="footer-note">BUNER MOBILE · EARLY DEVELOPMENT</p>
+    </main>
+    <section id="gameScreen" class="game-screen hidden">
+        <div id="gameCanvas"></div>
+        <div class="game-top-hud">
+            <button id="exitButton" class="hud-button">✕ EXIT</button>
+            <div class="health-box">
+                <span>HEALTH</span>
+                <div class="health-track">
+                    <div id="healthBar" class="health-fill"></div>
+                </div>
+                <strong id="healthText">100</strong>
+            </div>
+        </div>
+        <div class="game-message" id="gameMessage">
+            BUNER MOBILE
+        </div>
+        <div class="mobile-controls">
+            <div id="joystick" class="joystick">
+                <div id="joystickKnob" class="joystick-knob"></div>
+            </div>
+            <div class="action-buttons">
+                <button id="jumpButton" class="action-button">JUMP</button>
+                <button id="runButton" class="action-button">RUN</button>
+            </div>
+        </div>
+        <div class="look-hint">Drag the screen to look around</div>
+    </section>
+    <div id="modal" class="modal hidden">
+        <div class="modal-card">
+            <button id="closeModal" class="close-button">✕</button>
+            <h2 id="modalTitle">SETTINGS</h2>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
