@@ -1774,13 +1774,11 @@
     // ==========================================
 
     function initializeLobby() {
-        $("playerName").textContent = state.playerName;
-
-        $("selectedMapName").textContent = "BUNER VALLEY";
-
-        setMessage("READY FOR BATTLE");
-    }
-
-    initializeLobby();
-
+    $("playerName").textContent = state.playerName;
+    $("selectedMapName").textContent = "BUNER VALLEY";
+    setMessage("READY FOR BATTLE");
+}
+// Connect the START BATTLE button.
+$("startButton").addEventListener("click", startGame);
+initializeLobby();
 })();
