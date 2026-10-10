@@ -341,6 +341,7 @@
     floor.rotation.x = -Math.PI / 2;
 
     previewRoot = buildCharacter(previewScene);
+    
     const previewLoadToken = (createPreview.loadToken || 0) + 1;
 createPreview.loadToken = previewLoadToken;
 loadBunerCharacter()
