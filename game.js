@@ -1021,7 +1021,7 @@
     const loader = new window.GLTFLoader();
 
     loader.load(
-    "https://model_E06A91C3-7469-4FE0-918B-26317C457A5A.glb",
+    "https://fca4f8d5-58d7-4f74-b56b-e80c95bc83bd_white_mesh.glb",
     
 
         function (gltf) {
