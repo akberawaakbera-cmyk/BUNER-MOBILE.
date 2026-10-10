@@ -341,6 +341,28 @@
     floor.rotation.x = -Math.PI / 2;
 
     previewRoot = buildCharacter(previewScene);
+    const previewLoadToken = (createPreview.loadToken || 0) + 1;
+createPreview.loadToken = previewLoadToken;
+loadBunerCharacter()
+  .then((model) => {
+    if (
+      previewLoadToken !== createPreview.loadToken ||
+      !previewScene
+    ) {
+      return;
+    }
+    if (previewRoot) {
+      previewScene.remove(previewRoot);
+    }
+    previewRoot = model;
+    previewRoot.rotation.y = Math.PI + previewYaw;
+    previewScene.add(previewRoot);
+  })
+  .catch((error) => {
+    console.error('Lobby character failed to load:', error);
+    // Keep the existing procedural character as a fallback.
+  });
+  
     previewRoot.rotation.y = Math.PI + previewYaw;
 
     resizePreview();
