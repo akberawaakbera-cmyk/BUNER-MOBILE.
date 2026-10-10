@@ -1069,6 +1069,699 @@ window.__BUNER_MOBILE_GLB_READY__ = true;
     updateHUD();
   }
 
+  // =====================================================
+// BUNER MOBILE — CHARACTER SELECTION SYSTEM
+// =====================================================
+
+const CHARACTER_LIBRARY = [
+  {
+    id: "soldier",
+    name: "FIELD SOLDIER",
+    role: "ASSAULT",
+    model: MODEL_PATH,
+    unlocked: true,
+    description: "Your current custom 3D character."
+  },
+  {
+    id: "scout",
+    name: "SHADOW SCOUT",
+    role: "RECON",
+    model: null,
+    unlocked: false,
+    description: "A fast reconnaissance operator."
+  },
+  {
+    id: "ranger",
+    name: "ELITE RANGER",
+    role: "SNIPER",
+    model: null,
+    unlocked: false,
+    description: "A specialist for long-range combat."
+  },
+  {
+    id: "guardian",
+    name: "IRON GUARDIAN",
+    role: "DEFENDER",
+    model: null,
+    unlocked: false,
+    description: "A heavily equipped battlefield defender."
+  }
+];
+
+let characterScreen = null;
+let characterScreenStyle = null;
+let characterPreviewRenderer = null;
+let characterPreviewScene = null;
+let characterPreviewCamera = null;
+let characterPreviewModel = null;
+let characterPreviewMixer = null;
+let characterPreviewFrame = 0;
+let characterPreviewToken = 0;
+let selectedCharacterIndex = 0;
+
+function getSelectedCharacter() {
+  return (
+    CHARACTER_LIBRARY.find((character) => character.id === state.character) ||
+    CHARACTER_LIBRARY[0]
+  );
+}
+
+function createCharacterSelectionScreen() {
+  if (characterScreen) return;
+
+  characterScreenStyle = document.createElement("style");
+
+  characterScreenStyle.textContent = `
+    #bunerCharacterScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      color: #f4f7ef;
+      background:
+        radial-gradient(ellipse at 75% 15%, #29452b 0%, transparent 42%),
+        linear-gradient(145deg, #080d09, #101b12 65%, #080d09);
+      font-family: Arial, sans-serif;
+      padding:
+        max(16px, env(safe-area-inset-top))
+        max(14px, env(safe-area-inset-right))
+        max(20px, env(safe-area-inset-bottom))
+        max(14px, env(safe-area-inset-left));
+      box-sizing: border-box;
+    }
+
+    #bunerCharacterScreen * {
+      box-sizing: border-box;
+    }
+
+    #bunerCharacterScreen.open {
+      display: block;
+    }
+
+    #bunerCharacterScreen .bc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(183,255,74,.28);
+      padding-bottom: 14px;
+    }
+
+    #bunerCharacterScreen .bc-brand {
+      color: #b7ff4a;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    #bunerCharacterScreen .bc-heading {
+      margin: 5px 0 0;
+      font-size: clamp(23px, 5vw, 38px);
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    #bunerCharacterScreen .bc-close {
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      border: 1px solid #52644a;
+      border-radius: 12px;
+      color: white;
+      background: #172218;
+      font-size: 24px;
+    }
+
+    #bunerCharacterScreen .bc-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+      align-items: stretch;
+    }
+
+    #bunerCharacterScreen .bc-preview-panel {
+      position: relative;
+      min-width: 0;
+      min-height: 330px;
+      overflow: hidden;
+      border: 1px solid rgba(183,255,74,.24);
+      border-radius: 18px;
+      background:
+        radial-gradient(ellipse at center, #354b36, #121d14 72%);
+    }
+
+    #bunerCharacterScreen .bc-canvas {
+      position: absolute;
+      inset: 0;
+      touch-action: pan-y;
+    }
+
+    #bunerCharacterScreen .bc-canvas canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #bunerCharacterScreen .bc-preview-info {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 2;
+      pointer-events: none;
+      padding: 12px;
+      border: 1px solid rgba(183,255,74,.2);
+      border-radius: 12px;
+      background: rgba(7,13,8,.83);
+    }
+
+    #bunerCharacterScreen .bc-name {
+      margin: 0;
+      color: #b7ff4a;
+      font-size: clamp(17px, 3vw, 25px);
+      font-weight: 900;
+    }
+
+    #bunerCharacterScreen .bc-role {
+      margin-top: 5px;
+      color: #a9b7a5;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    #bunerCharacterScreen .bc-description {
+      margin-top: 8px;
+      color: #d1d9cd;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    #bunerCharacterScreen .bc-status {
+      display: inline-block;
+      margin-top: 9px;
+      padding: 6px 9px;
+      border-radius: 6px;
+      color: #b7ff4a;
+      background: rgba(183,255,74,.12);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    #bunerCharacterScreen .bc-status.locked {
+      color: #ffbd72;
+      background: rgba(255,189,114,.12);
+    }
+
+    #bunerCharacterScreen .bc-roster-title {
+      margin: 0 0 12px;
+      font-size: 13px;
+      letter-spacing: 2px;
+    }
+
+    #bunerCharacterScreen .bc-roster {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    #bunerCharacterScreen .bc-card {
+      position: relative;
+      min-width: 0;
+      min-height: 118px;
+      padding: 13px 10px;
+      border: 1px solid #344532;
+      border-radius: 13px;
+      text-align: left;
+      color: #eaf0e5;
+      background: linear-gradient(145deg, #1c2b1d, #101812);
+    }
+
+    #bunerCharacterScreen .bc-card.selected {
+      border: 2px solid #b7ff4a;
+      background: linear-gradient(145deg, #2a4127, #152017);
+    }
+
+    #bunerCharacterScreen .bc-card:disabled {
+      opacity: .63;
+      cursor: not-allowed;
+    }
+
+    #bunerCharacterScreen .bc-card-icon {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 25px;
+    }
+
+    #bunerCharacterScreen .bc-card-name {
+      display: block;
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 900;
+    }
+
+    #bunerCharacterScreen .bc-card-status {
+      display: block;
+      margin-top: 7px;
+      color: #b7ff4a;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    #bunerCharacterScreen .bc-card-status.locked {
+      color: #ffbd72;
+    }
+
+    #bunerCharacterScreen .bc-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    #bunerCharacterScreen .bc-action {
+      min-height: 48px;
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #52644a;
+      border-radius: 11px;
+      color: #f4f7ef;
+      background: #1b291d;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    #bunerCharacterScreen .bc-action.primary {
+      color: #10170b;
+      border-color: #b7ff4a;
+      background: #b7ff4a;
+    }
+
+    #bunerCharacterScreen .bc-action:disabled {
+      opacity: .4;
+    }
+
+    #bunerCharacterScreen .bc-footer {
+      margin-top: 15px;
+      color: #93a18e;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 650px) {
+      #bunerCharacterScreen .bc-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #bunerCharacterScreen .bc-preview-panel {
+        min-height: 300px;
+      }
+
+      #bunerCharacterScreen .bc-roster {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  `;
+
+  document.head.appendChild(characterScreenStyle);
+
+  characterScreen = document.createElement("section");
+  characterScreen.id = "bunerCharacterScreen";
+  characterScreen.setAttribute("aria-label", "Character selection");
+
+  characterScreen.innerHTML = `
+    <header class="bc-header">
+      <div>
+        <div class="bc-brand">BUNER MOBILE</div>
+        <h1 class="bc-heading">CHARACTERS</h1>
+      </div>
+      <button class="bc-close" type="button" data-bc-close
+        aria-label="Close character selection">×</button>
+    </header>
+
+    <div class="bc-layout">
+      <section class="bc-preview-panel">
+        <div class="bc-canvas" data-bc-canvas></div>
+
+        <div class="bc-preview-info">
+          <h2 class="bc-name" data-bc-name>FIELD SOLDIER</h2>
+          <div class="bc-role" data-bc-role>ASSAULT OPERATOR</div>
+          <div class="bc-description" data-bc-description>
+            Your current custom 3D character.
+          </div>
+          <span class="bc-status" data-bc-status>AVAILABLE</span>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="bc-roster-title">CHOOSE YOUR OPERATOR</h2>
+        <div class="bc-roster" data-bc-roster></div>
+
+        <div class="bc-actions">
+          <button class="bc-action" type="button" data-bc-back>
+            BACK
+          </button>
+          <button class="bc-action primary" type="button" data-bc-select>
+            SELECT CHARACTER
+          </button>
+        </div>
+
+        <div class="bc-footer">
+          Locked operators are unavailable until you add their GLB models.
+          Your selected operator will be used in the lobby and battle.
+        </div>
+      </section>
+    </div>
+  `;
+
+  document.body.appendChild(characterScreen);
+
+  characterScreen.addEventListener("click", (event) => {
+    const closeButton = event.target.closest("[data-bc-close], [data-bc-back]");
+
+    if (closeButton) {
+      closeCharacterSelection();
+      return;
+    }
+
+    const card = event.target.closest("[data-bc-character]");
+    if (card) {
+      const index = Number(card.dataset.bcCharacter);
+      const character = CHARACTER_LIBRARY[index];
+
+      if (!character || !character.unlocked) return;
+
+      selectedCharacterIndex = index;
+      updateCharacterSelectionUI();
+      loadCharacterSelectionPreview(character);
+      return;
+    }
+
+    if (event.target.closest("[data-bc-select]")) {
+      selectCurrentCharacter();
+    }
+  });
+
+  characterScreen.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+
+    characterScreen._dragX = event.clientX;
+    characterScreen._dragModel = characterPreviewModel;
+  });
+
+  characterScreen.addEventListener("pointermove", (event) => {
+    if (
+      characterScreen._dragX == null ||
+      !characterScreen._dragModel ||
+      !(event.buttons & 1)
+    ) return;
+
+    characterScreen._dragModel.rotation.y +=
+      (event.clientX - characterScreen._dragX) * 0.01;
+
+    characterScreen._dragX = event.clientX;
+  });
+
+  const endDrag = () => {
+    if (characterScreen) {
+      characterScreen._dragX = null;
+      characterScreen._dragModel = null;
+    }
+  };
+
+  characterScreen.addEventListener("pointerup", endDrag);
+  characterScreen.addEventListener("pointercancel", endDrag);
+}
+
+function updateCharacterSelectionUI() {
+  if (!characterScreen) return;
+
+  const character = CHARACTER_LIBRARY[selectedCharacterIndex];
+  if (!character) return;
+
+  characterScreen.querySelector("[data-bc-name]").textContent =
+    character.name;
+
+  characterScreen.querySelector("[data-bc-role]").textContent =
+    character.role + " OPERATOR";
+
+  characterScreen.querySelector("[data-bc-description]").textContent =
+    character.description;
+
+  const status = characterScreen.querySelector("[data-bc-status]");
+  status.textContent = character.unlocked ? "AVAILABLE" : "LOCKED";
+  status.classList.toggle("locked", !character.unlocked);
+
+  characterScreen.querySelector("[data-bc-select]").disabled =
+    !character.unlocked;
+
+  const roster = characterScreen.querySelector("[data-bc-roster]");
+
+  roster.innerHTML = CHARACTER_LIBRARY.map((item, index) => {
+    const active = index === selectedCharacterIndex;
+    const locked = !item.unlocked;
+
+    const icon = locked
+      ? "🔒"
+      : item.id === "soldier"
+        ? "🪖"
+        : "🎖️";
+
+    return `
+      <button
+        type="button"
+        class="bc-card ${active ? "selected" : ""}"
+        data-bc-character="${index}"
+        ${locked ? "disabled" : ""}
+        aria-pressed="${active}"
+      >
+        <span class="bc-card-icon">${icon}</span>
+        <span class="bc-card-name">${item.name}</span>
+        <span class="bc-card-status ${locked ? "locked" : ""}">
+          ${locked ? "LOCKED" : active ? "SELECTED" : "AVAILABLE"}
+        </span>
+      </button>
+    `;
+  }).join("");
+}
+
+function openCharacterSelection() {
+  createCharacterSelectionScreen();
+
+  const currentIndex = CHARACTER_LIBRARY.findIndex(
+    (character) => character.id === state.character && character.unlocked
+  );
+
+  selectedCharacterIndex = currentIndex >= 0 ? currentIndex : 0;
+
+  characterScreen.classList.add("open");
+  updateCharacterSelectionUI();
+
+  if (!characterPreviewRenderer) {
+    initCharacterSelectionPreview();
+  }
+
+  loadCharacterSelectionPreview(
+    CHARACTER_LIBRARY[selectedCharacterIndex]
+  );
+}
+
+function closeCharacterSelection() {
+  if (!characterScreen) return;
+
+  characterScreen.classList.remove("open");
+  characterScreen._dragX = null;
+  characterScreen._dragModel = null;
+  ++characterPreviewToken;
+
+  if (characterPreviewFrame) {
+    cancelAnimationFrame(characterPreviewFrame);
+    characterPreviewFrame = 0;
+  }
+
+  if (characterPreviewRenderer) {
+    characterPreviewRenderer.dispose();
+    characterPreviewRenderer.forceContextLoss?.();
+    characterPreviewRenderer.domElement.remove();
+    characterPreviewRenderer = null;
+  }
+
+  if (characterPreviewModel && characterPreviewScene) {
+    characterPreviewScene.remove(characterPreviewModel);
+    disposeObject(characterPreviewModel);
+  }
+
+  characterPreviewScene = null;
+  characterPreviewCamera = null;
+  characterPreviewModel = null;
+  characterPreviewMixer = null;
+}
+
+function selectCurrentCharacter() {
+  const character = CHARACTER_LIBRARY[selectedCharacterIndex];
+
+  if (!character || !character.unlocked || !character.model) {
+    message("THIS CHARACTER IS LOCKED");
+    return;
+  }
+
+  state.character = character.id;
+
+  // Refresh the existing lobby preview with the selected GLB.
+  loadPreviewGLB();
+
+  updateHUD();
+  closeCharacterSelection();
+
+  message(character.name + " SELECTED");
+}
+
+function initCharacterSelectionPreview() {
+  const container = characterScreen?.querySelector("[data-bc-canvas]");
+  if (!container || !THREE) return;
+
+  characterPreviewScene = new THREE.Scene();
+  characterPreviewScene.background = new THREE.Color(0x17251a);
+
+  characterPreviewCamera = new THREE.PerspectiveCamera(
+    35,
+    1,
+    0.1,
+    100
+  );
+
+  characterPreviewCamera.position.set(0, 1.35, 5.2);
+  characterPreviewCamera.lookAt(0, 0.95, 0);
+
+  characterPreviewRenderer = new THREE.WebGLRenderer({
+    antialias: state.graphics === "high",
+    alpha: false,
+    powerPreference: "high-performance"
+  });
+
+  characterPreviewRenderer.setPixelRatio(
+    Math.min(window.devicePixelRatio || 1, 1.25)
+  );
+
+  characterPreviewRenderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  container.replaceChildren(characterPreviewRenderer.domElement);
+
+  characterPreviewScene.add(
+    new THREE.HemisphereLight(0xddeeff, 0x38452d, 2)
+  );
+
+  const light = new THREE.DirectionalLight(0xffffff, 2.5);
+  light.position.set(3, 6, 4);
+  characterPreviewScene.add(light);
+
+  const floor = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.4, 1.4, 0.12, 32),
+    new THREE.MeshStandardMaterial({
+      color: 0x3e4938,
+      roughness: 0.85
+    })
+  );
+
+  floor.position.y = -0.07;
+  characterPreviewScene.add(floor);
+
+  characterPreviewModel = createFallbackCharacter();
+  characterPreviewScene.add(characterPreviewModel);
+
+  resizeCharacterSelectionPreview();
+
+  function render() {
+    if (!characterPreviewRenderer || !characterPreviewScene) return;
+
+    characterPreviewFrame = requestAnimationFrame(render);
+
+    if (characterPreviewModel) {
+      characterPreviewModel.rotation.y += 0.003;
+    }
+
+    if (characterPreviewMixer) {
+      characterPreviewMixer.update(0.016);
+    }
+
+    characterPreviewRenderer.render(
+      characterPreviewScene,
+      characterPreviewCamera
+    );
+  }
+
+  render();
+}
+
+function resizeCharacterSelectionPreview() {
+  if (
+    !characterPreviewRenderer ||
+    !characterPreviewCamera ||
+    !characterScreen
+  ) return;
+
+  const container = characterScreen.querySelector("[data-bc-canvas]");
+  if (!container) return;
+
+  const width = Math.max(1, container.clientWidth);
+  const height = Math.max(1, container.clientHeight);
+
+  characterPreviewRenderer.setSize(width, height, false);
+  characterPreviewCamera.aspect = width / height;
+  characterPreviewCamera.updateProjectionMatrix();
+}
+
+async function loadCharacterSelectionPreview(character) {
+  if (!characterPreviewScene || !character) return;
+
+  const token = ++characterPreviewToken;
+
+  if (characterPreviewModel) {
+    characterPreviewScene.remove(characterPreviewModel);
+    disposeObject(characterPreviewModel);
+  }
+
+  characterPreviewModel = createFallbackCharacter();
+  characterPreviewMixer = null;
+  characterPreviewScene.add(characterPreviewModel);
+
+  if (!character.model || !character.unlocked) return;
+
+  try {
+    const Loader = await getGLTFLoader();
+    const loader = new Loader();
+    const gltf = await loader.loadAsync(character.model);
+
+    const built = makeAnimatedClone(gltf);
+
+    if (
+      token !== characterPreviewToken ||
+      !characterPreviewScene ||
+      !characterScreen?.classList.contains("open")
+    ) {
+      disposeObject(built.model);
+      return;
+    }
+
+    if (characterPreviewModel) {
+      characterPreviewScene.remove(characterPreviewModel);
+      disposeObject(characterPreviewModel);
+    }
+
+    characterPreviewModel = built.model;
+    characterPreviewMixer = built.mixer;
+
+    characterPreviewScene.add(characterPreviewModel);
+  } catch (error) {
+    console.warn("Character selection preview failed:", error);
+    message("PREVIEW FAILED — CHECK GLB PATH");
+  }
+}
+
   // ----------------- LOBBY MENUS -----------------
 
   function openCharacterMenu() {
