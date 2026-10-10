@@ -1021,7 +1021,7 @@
     const loader = new window.GLTFLoader();
 
     loader.load(
-    "https://pub-0ecebf61e10c4bf0b37061d077302c45.r2.dev/This%20all%20needs%20generate%20only%20one%203d%20model%20face%20hands%20lags%20and%20remove%20background_Meshy_AI_2026-10-10_b5df4b.glb",
+    "https://model_E06A91C3-7469-4FE0-918B-26317C457A5A.glb",
     
 
         function (gltf) {
