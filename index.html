@@ -446,23 +446,33 @@
 <script type="module">
     import * as THREE from
         "https://esm.sh/three@0.160.0";
+
     import { GLTFLoader } from
         "https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+
     window.THREE = THREE;
     window.GLTFLoader = GLTFLoader;
-    const gameScript = document.createElement("script");
-    gameScript.src = "./game.js";
-    gameScript.onload = () => {
-        console.log("BUNER MOBILE: game.js loaded");
-    };
-    gameScript.onerror = () => {
-        console.error("BUNER MOBILE: game.js failed to load");
-        const loadingText = document.getElementById("loadingText");
-        if (loadingText) {
-            loadingText.textContent = "GAME SCRIPT FAILED TO LOAD";
-        }
-    };
-    document.body.appendChild(gameScript);
+
+    const scripts = [
+        "./modules/character-loader.js",
+        "./modules/lobby.js",
+        "./modules/player-controller.js",
+        "./game.js"
+    ];
+
+    for (const src of scripts) {
+        await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+
+            script.src = src;
+
+            script.onload = resolve;
+
+            script.onerror = () => {
+                reject(new Error("Failed to load: " + src));
+            };
+
+            document.body.appendChild(script);
+        });
+    }
 </script>
-</body>
-</html>
