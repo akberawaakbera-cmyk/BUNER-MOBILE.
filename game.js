@@ -1021,7 +1021,8 @@
     const loader = new window.GLTFLoader();
 
     loader.load(
-    "https://pub-0ecebf61e10c4bf0b37061d077302c45.r2.dev/fca4f8d5-58d7-4f74-b56b-e80c95bc83bd_white_mesh.glb",
+    "https://pub-0ecebf61e10c4bf0b37061d077302c45.r2.dev/Meshy_AI_2026-10-10_b5df4b.glb",
+    
 
         function (gltf) {
             if (!player || !scene) return;
