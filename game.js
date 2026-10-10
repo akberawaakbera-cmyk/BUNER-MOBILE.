@@ -6,8 +6,8 @@
   // Three.js 0.160.0 | Mobile-friendly prototype
   // =====================================================
 
-  if (window.__BUNER_MOBILE_GL B_READY__) return;
-  window.__BUNER_MOBILE_GL B_READY__ = true;
+  if (window.__BUNER_MOBILE_GLB_READY__) return;
+window.__BUNER_MOBILE_GLB_READY__ = true;
 
   const $ = (id) => document.getElementById(id);
   const THREE = window.THREE;
