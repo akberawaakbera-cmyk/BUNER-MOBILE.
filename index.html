@@ -19,7 +19,7 @@
       <p class="splash-subtitle">ENTER THE BATTLEFIELD</p>
       <div class="splash-loader"><div class="splash-loader-fill"></div></div>
       <p id="loadingText" class="splash-loading-text">INITIALIZING GAME...</p>
-      <p class="splash-version">DEVELOPMENT BUILD · V2</p>
+      <p class="splash-version">DEVELOPMENT BUILD · V3</p>
     </div>
   </section>
   <header class="top-bar">
@@ -41,81 +41,81 @@
       <h2>YOUR BATTLE.<br><span>YOUR LEGACY.</span></h2>
       <p class="subtitle">Choose your fighter, prepare your weapons, select your battlefield and survive.</p>
     </section>
-    <section class="player-card">
-      <div class="avatar">👤</div>
-      <div class="player-info">
-        <span>YOUR CHARACTER</span>
-        <h3 id="playerName">SURVIVOR</h3>
-        <p id="playerStatus">Rookie Warrior</p>
-      </div>
-      <button id="editProfile" class="small-button" type="button">EDIT</button>
-    </section>
-    <section class="selection-section">
-      <div class="section-heading">
-        <div><p class="eyebrow">YOUR FIGHTER</p><h2>CHARACTER</h2></div>
-        <span class="section-number">01</span>
-      </div>
-      <div class="character-preview">
-        <div id="characterPreviewCanvas" class="character-preview-canvas" aria-label="3D character preview"></div>
-        <div class="character-preview-label"><span class="online-indicator"></span> CHARACTER PREVIEW</div>
-        <div class="character-rotate-hint">DRAG TO ROTATE CHARACTER</div>
-        <div class="character-actions">
-          <button id="characterButton" class="menu-button" type="button">
-            <span>♟</span><strong>SELECT CHARACTER</strong><small>Choose your fighter</small>
-          </button>
-          <button id="emoteButton" class="menu-button" type="button">
-            <span>🕺</span><strong>EMOTES</strong><small>Choose an animation</small>
-          </button>
-        </div>
-      </div>
-    </section>
-    <section class="selection-section">
-      <div class="section-heading">
-        <div><p class="eyebrow">PREPARE FOR COMBAT</p><h2>WEAPON LOADOUT</h2></div>
-        <span class="section-number">02</span>
-      </div>
-      <div class="weapon-grid">
-        <button class="weapon-card selected" data-weapon="rifle" type="button"><div class="weapon-image">🔫</div><strong>ASSAULT RIFLE</strong><small>PRIMARY WEAPON</small></button>
-        <button class="weapon-card" data-weapon="sniper" type="button"><div class="weapon-image">🎯</div><strong>SNIPER</strong><small>LONG RANGE</small></button>
-        <button class="weapon-card" data-weapon="shotgun" type="button"><div class="weapon-image">💥</div><strong>SHOTGUN</strong><small>CLOSE RANGE</small></button>
-        <button class="weapon-card" data-weapon="smg" type="button"><div class="weapon-image">🔫</div><strong>SMG</strong><small>FAST FIRE</small></button>
-        <button class="weapon-card" data-weapon="pistol" type="button"><div class="weapon-image">🔫</div><strong>PISTOL</strong><small>SECONDARY</small></button>
-        <button id="loadoutButton" class="weapon-card" type="button"><div class="weapon-image">🎒</div><strong>LOADOUT</strong><small>YOUR EQUIPMENT</small></button>
-      </div>
-      <p class="info-note">Weapon icons are placeholders. Detailed 3D weapons can be added as the game develops.</p>
-    </section>
-    <section class="selection-section">
-      <div class="section-heading">
-        <div><p class="eyebrow">CHOOSE YOUR BATTLEFIELD</p><h2>SELECT MAP</h2></div>
-        <span class="section-number">03</span>
-      </div>
-      <div class="map-grid">
-        <button class="map-card selected" data-map="buner" type="button">
-          <div class="map-art map-buner"><span>🏔️</span></div>
-          <div class="map-details"><strong>BUNER VALLEY</strong><small>HILLS · VILLAGE · FOREST</small></div>
-          <span class="map-check">✓</span>
-        </button>
-        <button class="map-card" data-map="forest" type="button">
-          <div class="map-art map-forest"><span>🌲</span></div>
-          <div class="map-details"><strong>FOREST ZONE</strong><small>FOREST · HILLS · ROADS</small></div>
-          <span class="map-check">✓</span>
-        </button>
-        <button class="map-card" data-map="desert" type="button">
-          <div class="map-art map-desert"><span>🏜️</span></div>
-          <div class="map-details"><strong>DESERT OUTPOST</strong><small>ROCKS · OPEN TERRAIN</small></div>
-          <span class="map-check">✓</span>
-        </button>
-      </div>
-    </section>
-    <section class="menu-grid">
-      <button id="settingsButton" class="menu-button" type="button"><span>⚙️</span><strong>SETTINGS</strong><small>Graphics and controls</small></button>
-      <button id="inventoryButton" class="menu-button" type="button"><span>🎒</span><strong>INVENTORY</strong><small>Available equipment</small></button>
-    </section>
-    <section class="start-section">
-      <div class="selected-info"><span>SELECTED MAP</span><strong id="selectedMapName">BUNER VALLEY</strong></div>
-      <button id="startButton" class="start-button" type="button"><span>▶</span> START BATTLE</button>
-      <p class="footer-note">BUNER MOBILE · DEVELOPMENT BUILD</p>
-    </section>
+<section class="player-card">
+  <div class="avatar">👤</div>
+  <div class="player-info">
+    <span>YOUR CHARACTER</span>
+    <h3 id="playerName">SURVIVOR</h3>
+    <p id="playerStatus">Rookie Warrior</p>
+  </div>
+  <button id="editProfile" class="small-button" type="button">EDIT</button>
+</section>
+<section class="selection-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">YOUR FIGHTER</p><h2>CHARACTER</h2></div>
+    <span class="section-number">01</span>
+  </div>
+  <div class="character-preview">
+    <div id="characterPreviewCanvas" class="character-preview-canvas" aria-label="3D character preview"></div>
+    <div class="character-preview-label"><span class="online-indicator"></span> CHARACTER PREVIEW</div>
+    <div class="character-rotate-hint">DRAG TO ROTATE CHARACTER</div>
+    <div class="character-actions">
+      <button id="characterButton" class="menu-button" type="button">
+        <span>♟</span><strong>SELECT CHARACTER</strong><small>Choose your fighter</small>
+      </button>
+      <button id="emoteButton" class="menu-button" type="button">
+        <span>🕺</span><strong>EMOTES</strong><small>Choose an animation</small>
+      </button>
+    </div>
+  </div>
+</section>
+<section class="selection-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">PREPARE FOR COMBAT</p><h2>WEAPON LOADOUT</h2></div>
+    <span class="section-number">02</span>
+  </div>
+  <div class="weapon-grid">
+    <button class="weapon-card selected" data-weapon="rifle" type="button"><div class="weapon-image">🔫</div><strong>ASSAULT RIFLE</strong><small>PRIMARY WEAPON</small></button>
+    <button class="weapon-card" data-weapon="sniper" type="button"><div class="weapon-image">🎯</div><strong>SNIPER</strong><small>LONG RANGE</small></button>
+    <button class="weapon-card" data-weapon="shotgun" type="button"><div class="weapon-image">💥</div><strong>SHOTGUN</strong><small>CLOSE RANGE</small></button>
+    <button class="weapon-card" data-weapon="smg" type="button"><div class="weapon-image">🔫</div><strong>SMG</strong><small>FAST FIRE</small></button>
+    <button class="weapon-card" data-weapon="pistol" type="button"><div class="weapon-image">🔫</div><strong>PISTOL</strong><small>SECONDARY</small></button>
+    <button id="loadoutButton" class="weapon-card" type="button"><div class="weapon-image">🎒</div><strong>LOADOUT</strong><small>YOUR EQUIPMENT</small></button>
+  </div>
+  <p class="info-note">Weapon icons are placeholders. Detailed 3D weapons can be added as the game develops.</p>
+</section>
+<section class="selection-section">
+  <div class="section-heading">
+    <div><p class="eyebrow">CHOOSE YOUR BATTLEFIELD</p><h2>SELECT MAP</h2></div>
+    <span class="section-number">03</span>
+  </div>
+  <div class="map-grid">
+    <button class="map-card selected" data-map="buner" type="button">
+      <div class="map-art map-buner"><span>🏔️</span></div>
+      <div class="map-details"><strong>BUNER VALLEY</strong><small>HILLS · VILLAGE · FOREST</small></div>
+      <span class="map-check">✓</span>
+    </button>
+    <button class="map-card" data-map="forest" type="button">
+      <div class="map-art map-forest"><span>🌲</span></div>
+      <div class="map-details"><strong>FOREST ZONE</strong><small>FOREST · HILLS · ROADS</small></div>
+      <span class="map-check">✓</span>
+    </button>
+    <button class="map-card" data-map="desert" type="button">
+      <div class="map-art map-desert"><span>🏜️</span></div>
+      <div class="map-details"><strong>DESERT OUTPOST</strong><small>ROCKS · OPEN TERRAIN</small></div>
+      <span class="map-check">✓</span>
+    </button>
+  </div>
+</section>
+<section class="menu-grid">
+  <button id="settingsButton" class="menu-button" type="button"><span>⚙️</span><strong>SETTINGS</strong><small>Graphics and controls</small></button>
+  <button id="inventoryButton" class="menu-button" type="button"><span>🎒</span><strong>INVENTORY</strong><small>Available equipment</small></button>
+</section>
+<section class="start-section">
+  <div class="selected-info"><span>SELECTED MAP</span><strong id="selectedMapName">BUNER VALLEY</strong></div>
+  <button id="startButton" class="start-button" type="button"><span>▶</span> START BATTLE</button>
+  <p class="footer-note">BUNER MOBILE · DEVELOPMENT BUILD</p>
+</section>
   </main>
   <section id="gameScreen" class="game-screen hidden">
     <div id="gameCanvas"></div>
@@ -179,7 +179,9 @@
   setTimeout(() => {
     if (splash) {
       splash.classList.add('splash-hidden');
-      setTimeout(() => splash.classList.add('hidden'), 800);
+      setTimeout(() => {
+        splash.classList.add('hidden');
+      }, 800);
     }
     clearInterval(timer);
   }, 2400);
@@ -188,23 +190,53 @@
 <script type="module">
 (async () => {
   const loadingText = document.getElementById('loadingText');
-  try {
-    if (loadingText) loadingText.textContent = 'LOADING 3D ENGINE...';
-    const THREE = await import('https://esm.sh/three@0.160.0');
-    window.THREE = THREE;
-    if (loadingText) loadingText.textContent = 'LOADING GAME...';
-    await new Promise((resolve, reject) => {
+  function loadClassicScript(src) {
+    return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = './game.js';
+      script.src = src;
       script.onload = resolve;
-      script.onerror = () => reject(new Error('Could not load game.js'));
+      script.onerror = () => reject(
+        new Error('Could not load ' + src)
+      );
       document.body.appendChild(script);
     });
-    console.log('BUNER MOBILE: Game loaded.');
+  }
+  try {
+    if (loadingText) {
+      loadingText.textContent = 'LOADING 3D ENGINE...';
+    }
+    const THREE = await import('https://esm.sh/three@0.160.0');
+    window.THREE = THREE;
+    if (loadingText) {
+      loadingText.textContent = 'LOADING 3D ASSET SYSTEM...';
+    }
+    // Load the GLB asset loader before game.js.
+    // If the loader fails, keep the existing game playable.
+    try {
+      await loadClassicScript('./modules/asset-loader.js');
+      console.log('BUNER MOBILE: GLB asset loader loaded.');
+    } catch (assetError) {
+      console.warn(
+        'BUNER MOBILE: GLB loader unavailable; continuing with existing game.',
+        assetError
+      );
+    }
+    if (loadingText) {
+      loadingText.textContent = 'LOADING GAME...';
+    }
+    await loadClassicScript('./game.js');
+    console.log('BUNER MOBILE: Game loaded successfully.');
+    if (loadingText) {
+      loadingText.textContent = 'WELCOME TO BUNER MOBILE';
+    }
   } catch (error) {
     console.error('BUNER MOBILE loading error:', error);
-    if (loadingText) loadingText.textContent = 'GAME FAILED TO LOAD';
-    alert('BUNER MOBILE could not load. Check game.js and internet connection.');
+    if (loadingText) {
+      loadingText.textContent = 'GAME FAILED TO LOAD';
+    }
+    alert(
+      'BUNER MOBILE could not load. Check game.js, Three.js internet access, and the browser console.'
+    );
   }
 })();
 </script>
