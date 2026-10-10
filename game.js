@@ -1021,7 +1021,7 @@
     const loader = new window.GLTFLoader();
 
     loader.load(
-    "./This all needs generate only one 3d model face hands lags and remove background_Meshy_AI_2026-10-10_b5df4b 2.glb",
+    "./fca4f8d5-58d7-4f74-b56b-e80c95bc83bd_white_mesh.glb",
 
         function (gltf) {
             if (!player || !scene) return;
