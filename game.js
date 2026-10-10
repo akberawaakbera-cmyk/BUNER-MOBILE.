@@ -33,6 +33,10 @@
     let previewRenderer = null;
     let previewCharacter = null;
     let previewAnimationFrame = 0;
+    let lobbyCharacterSystem = null;
+    let lobbyGLBCharacter = null;
+    let gameplayGLBCharacter = null;
+    let playerController = null;
     let previewPointer = null;
     let previewLastX = 0;
 
@@ -991,7 +995,7 @@
         };
     }
 
-    function createPlayer() {
+    async function createPlayer() {
     player = new THREE.Group();
 
     player.position.set(
@@ -1000,7 +1004,9 @@
         4
     );
 
-    // Keep the original character as a fallback.
+    scene.add(player);
+
+    // Create the procedural fallback immediately.
     const fallback = buildCharacterModel(player);
 
     playerBody = fallback.bodyPivot;
@@ -1008,21 +1014,89 @@
     muzzleFlash = fallback.flash;
     player.userData.model = fallback;
 
-    scene.add(player);
     updateWeaponAppearance();
 
-    // Load the custom 3D character.
-    if (typeof window.GLTFLoader !== "function") {
-        console.error("GLTFLoader is not available.");
-        setMessage("3D MODEL LOADER ERROR");
+    // Connect the modular character loader.
+    if (!window.BunerCharacterLoader) {
+        console.warn("Character loader is not connected.");
+        setMessage("USING DEFAULT CHARACTER");
         return;
     }
 
-    const loader = new window.GLTFLoader();
+    const thisPlayer = player;
 
-    loader.load(
-    "https://fca4f8d5-58d7-4f74-b56b-e80c95bc83bd_white_mesh.glb",
-    
+    try {
+        const result =
+            await window.BunerCharacterLoader.loadCharacter({
+                height: 2.2
+            });
+
+        // The game might have exited while the model was loading.
+        if (
+            !gameRunning &&
+            gameScreen.classList.contains("hidden")
+        ) {
+            result.dispose();
+            return;
+        }
+
+        if (player !== thisPlayer || !scene) {
+            result.dispose();
+            return;
+        }
+
+        gameplayGLBCharacter = result;
+
+        // Keep the existing weapon and muzzle flash.
+        const weapon = fallback.gun;
+        const flash = fallback.flash;
+
+        weapon.remove(flash);
+
+        if (weapon.parent) {
+            weapon.parent.remove(weapon);
+        }
+
+        // Remove the procedural character, but keep the weapon.
+        player.remove(fallback.root);
+
+        // Put the imported model inside the player container.
+        player.add(result.root);
+
+        player.add(weapon);
+
+        weapon.position.set(0.36, 1.42, -0.36);
+
+        playerBody = result.root;
+        playerGun = weapon;
+        muzzleFlash = flash;
+
+        player.userData.model = null;
+        player.userData.glbCharacter = result;
+
+        playerController = window.BunerPlayerController
+            ? new window.BunerPlayerController(result)
+            : null;
+
+        updateWeaponAppearance();
+
+        console.log(
+            "BUNER MOBILE: Modular GLB character loaded.",
+            result.hasAnimations
+                ? "Animations available."
+                : "No embedded animations."
+        );
+
+        setMessage(
+            result.hasAnimations
+                ? "CHARACTER READY"
+                : "CHARACTER READY · STATIC MODEL"
+        );
+    } catch (error) {
+        console.error("Custom character loading failed:", error);
+        setMessage("DEFAULT CHARACTER ACTIVE");
+    }
+}
 
         function (gltf) {
             if (!player || !scene) return;
@@ -1236,7 +1310,36 @@
             previewScene.add(floor);
 
             previewCharacter = buildCharacterModel(previewScene);
+            
+           // Load the same GLB character into the lobby preview.
+if (window.BunerLobbyCharacter) {
+    lobbyCharacterSystem = new window.BunerLobbyCharacter();
 
+    lobbyCharacterSystem.load(previewScene, {
+        height: 2.2
+    }).then((loaded) => {
+        if (!previewScene || !previewRenderer) {
+            lobbyCharacterSystem.dispose();
+            lobbyCharacterSystem = null;
+            return;
+        }
+
+        // Remove the procedural preview once the GLB is ready.
+        if (previewCharacter && previewCharacter.root) {
+            previewScene.remove(previewCharacter.root);
+        }
+
+        lobbyGLBCharacter = loaded.root;
+        previewCharacter = null;
+
+        console.log("Lobby GLB character loaded.");
+    }).catch((error) => {
+        console.warn(
+            "Lobby is using the procedural fallback character.",
+            error
+        );
+    });
+}
             previewCharacter.root.position.y = 0;
             previewCharacter.root.rotation.y = Math.PI;
 
@@ -1311,28 +1414,33 @@
         previewAnimationFrame = requestAnimationFrame(animatePreview);
 
         if (previewCharacter) {
-            if (previewPointer === null) {
-                previewCharacter.root.rotation.y += 0.004;
-            }
+            if (lobbyCharacterSystem && lobbyGLBCharacter) {
+    if (previewPointer === null) {
+        lobbyCharacterSystem.update(1 / 60);
+    }
+} else if (previewCharacter) {
+    if (previewPointer === null) {
+        previewCharacter.root.rotation.y += 0.004;
+    }
 
-            const time = performance.now() * 0.001;
+    const time = performance.now() * 0.001;
 
-            previewCharacter.bodyPivot.position.y =
-                Math.sin(time * 1.5) * 0.015;
+    previewCharacter.bodyPivot.position.y =
+        Math.sin(time * 1.5) * 0.015;
 
-            if (state.emote === "dance") {
-                previewCharacter.bodyPivot.rotation.z =
-                    Math.sin(time * 5) * 0.12;
-            } else if (state.emote === "wave") {
-                previewCharacter.bodyPivot.rotation.z =
-                    Math.sin(time * 2) * 0.035;
-            } else if (state.emote === "celebrate") {
-                previewCharacter.bodyPivot.rotation.z =
-                    Math.sin(time * 4) * 0.08;
-            } else {
-                previewCharacter.bodyPivot.rotation.z = 0;
-            }
-        }
+    if (state.emote === "dance") {
+        previewCharacter.bodyPivot.rotation.z =
+            Math.sin(time * 5) * 0.12;
+    } else if (state.emote === "wave") {
+        previewCharacter.bodyPivot.rotation.z =
+            Math.sin(time * 2) * 0.035;
+    } else if (state.emote === "celebrate") {
+        previewCharacter.bodyPivot.rotation.z =
+            Math.sin(time * 4) * 0.08;
+    } else {
+        previewCharacter.bodyPivot.rotation.z = 0;
+    }
+}
 
         previewRenderer.render(previewScene, previewCamera);
     }
@@ -1629,8 +1737,25 @@
         movement.addScaledVector(moveRight, sideways);
 
         const isMoving = movement.lengthSq() > 0.0001;
+        
+        // Update animations for the imported character.
+if (playerController) {
+    playerController.setFiring(isFiring);
 
-        if (isMoving) {
+    if (!isGrounded) {
+        playerController.setMovement("jump");
+    } else if (isMoving && isRunning) {
+        playerController.setMovement("run");
+    } else if (isMoving) {
+        playerController.setMovement("walk");
+    } else {
+        playerController.setMovement("idle");
+    }
+
+    playerController.update(delta);
+}
+
+     if (isMoving) {
             movement.normalize();
 
             movePlayerWithCollision(
