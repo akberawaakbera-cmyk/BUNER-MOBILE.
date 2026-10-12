@@ -6,7 +6,7 @@
 
   const $ = (id) => document.getElementById(id);
   const THREE = window.THREE;
-  const MODEL_PATH = "./assets/characters/model_E06A91C3-7469-4FE0-918B-26317C457A5A.glb";
+  const MODEL_PATH = "./assets/characters/player.glb";
 
   if (!THREE) {
     console.error("BUNER MOBILE: Three.js was not found. Load Three.js before game.js.");
@@ -315,7 +315,7 @@
     });
   }
 
-  function normalizeModel(model, desiredHeight = 1.8) {
+  function normalizeModel(model, desiredHeight = 1.78) {
     model.updateMatrixWorld(true);
 
     let box = new THREE.Box3().setFromObject(model);
