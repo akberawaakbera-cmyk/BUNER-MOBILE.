@@ -294,14 +294,20 @@
   let loaderPromise;
 
   async function getGLTFLoader() {
-    if (!loaderPromise) {
+  if (!loaderPromise) {
+    if (window.GLTFLoader) {
+      loaderPromise = Promise.resolve(
+        new window.GLTFLoader()
+      );
+    } else {
       loaderPromise = import(
         "https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js"
-      ).then(m => new m.GLTFLoader());
+      ).then(module => new module.GLTFLoader());
     }
-
-    return loaderPromise;
   }
+
+  return loaderPromise;
+}
 
   async function loadGLB(path = MODEL_PATH) {
     if (!path) {
