@@ -1476,12 +1476,16 @@
         playerRoot.add(gunRoot);
       }
     } catch (e) {
-      console.warn(
-        "Battle GLB failed; fallback character remains",
-        e
-      );
-    }
-  }
+  console.error("BUNER MOBILE GLB LOAD ERROR:", e);
+
+  message(
+    "3D MODEL FAILED: " + (e?.message || "Unknown error"),
+    6000
+  );
+
+  console.error("Model path:", MODEL_PATH);
+  console.error("Page URL:", window.location.href);
+}
 
   // =====================================================
   // CREATE BATTLE WORLD
