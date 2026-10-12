@@ -315,7 +315,7 @@
     });
   }
 
-  function normalizeModel(model, desiredHeight = 1.78) {
+  function normalizeModel(model, desiredHeight = 1.8) {
     model.updateMatrixWorld(true);
 
     let box = new THREE.Box3().setFromObject(model);
