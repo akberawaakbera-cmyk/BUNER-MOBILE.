@@ -6,7 +6,7 @@
 
   const $ = (id) => document.getElementById(id);
   const THREE = window.THREE;
-  const MODEL_PATH = "./player.glb";
+  const MODEL_PATH = "./assets/characters/This all needs generate only one 3d model face hands lags and remove background_Meshy_AI_2026-10-10_b5df4b 2.glb",
 
   if (!THREE) {
     console.error("BUNER MOBILE: Three.js was not found. Load Three.js before game.js.");
