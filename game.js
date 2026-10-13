@@ -6,7 +6,7 @@
 
   const $ = (id) => document.getElementById(id);
   const THREE = window.THREE;
-  const MODEL_PATH = "./assets/characters/buner-soldier.glb",
+  const MODEL_PATH = "./buner-soldier.glb",
 
   if (!THREE) {
     console.error("BUNER MOBILE: Three.js was not found. Load Three.js before game.js.");
